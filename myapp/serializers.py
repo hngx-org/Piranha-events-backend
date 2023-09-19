@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Event
+from . models import Event
 
 class EventSerializer(serializers.ModelSerializer):
     """EventSerializer class converts Event objects to and from JSON."""
