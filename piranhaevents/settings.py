@@ -37,13 +37,24 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django.contrib.sites',
 
     
     # local app
     "myapp.apps.MyappConfig",
     "rest_framework",
+
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
  
 ]
+SITE_ID = 1
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -123,13 +134,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+
 
 MEDIA_URL ='/images/'
 
-STATICFILES_DIRS =[
-    BASE_DIR/ 'static'
-]
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+
+# STATICFILES_DIRS =[
+#     BASE_DIR/ 'static'
+# ]
 
 MEDIA_ROOT ='static/images'
 

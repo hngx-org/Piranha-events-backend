@@ -4,6 +4,22 @@ from .models import Event
 from .serializers import EventSerializer
 from rest_framework.decorators import api_view
 
+
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
+
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+
+class GoogleLogin(SocialLoginView): # if you want to use Implicit Grant, use this
+    adapter_class = GoogleOAuth2Adapter
+
+
+
 """This view returns a list of all events."""
 @api_view(['GET'])
 def eventList (request): 
