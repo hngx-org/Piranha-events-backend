@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 # Create your models here.
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=250, unique=True)
     email = models.EmailField(unique=True)
@@ -15,6 +15,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+
+# Interested Events Model
+class interestedEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+    def __str__(self):
+        # Doubt this will work. Test to see.
+        return self.event.name
+
+# Images Model
+# 'Pillow' module will need to be installed for this to work.
+class Image(models.Model):
+    image_id = models.AutoField(primary_key=True)
+    comment = models.ForeignKey(comment, on_delete=models.CASCADE)
+    image = models.ImageField()
+
+    def __str__(self):
+        return self.image_id
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
@@ -75,4 +94,3 @@ class Event(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.title
-      
