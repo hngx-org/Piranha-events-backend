@@ -1,6 +1,6 @@
-# HNG Internship Mobile Application - Team Pinranha
+# HNG Internship Mobile Application - Team Piranha
 
-Welcome to the HNG Internship mobile application developed by Team Pinranha! This application serves as an events platform, allowing users to create accounts, organize events, form groups, and participate in various activities within the HNG Internship community.
+Welcome to the HNG Internship mobile application developed by Team Piranha! This application serves as an events platform, allowing users to create accounts, organize events, form groups, and participate in various activities within the HNG Internship community.
 
 ## Backend Information
 
@@ -27,6 +27,6 @@ The backend of this mobile application is built using Django, a powerful web fra
 
 ## Contributors
 
-- Team Pinranha: Members who contributed to the development of this application.
+- Team Piranha: Members who contributed to the development of this application.
 
 Feel free to explore, contribute, and enhance the functionality of this application. If you have any questions or encounter issues, please reach out to the development team. Happy coding!
