@@ -21,7 +21,7 @@ class User(AbstractBaseUser):
 # Interested Events Model
 class interestedEvent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey("Event", on_delete=models.CASCADE)
 
     def __str__(self):
         # Doubt this will work. Test to see.
@@ -31,7 +31,7 @@ class interestedEvent(models.Model):
 # 'Pillow' module will need to be installed for this to work.
 class Image(models.Model):
     image_id = models.AutoField(primary_key=True)
-    comment = models.ForeignKey(comment, on_delete=models.CASCADE)
+    comment = models.ForeignKey("comment", on_delete=models.CASCADE)
     image = models.ImageField()
 
     def __str__(self):
@@ -49,10 +49,11 @@ class Comment(models.Model):
 
 
 class Group(models.Model):
+    """model for group resource"""
     group_id = models.AutoField(primary_key=True)
     group_name = models.CharField(max_length=20 )
     description= models.CharField(max_length=100)
-    owner_id= models.ForeignKey(User.user_id)
+    owner_id= models.ForeignKey(User.user_id, on_delete=models.DO_NOTHING)
     created_at= models.DateField(auto_now_add=True)
 
     def __str__(self):
