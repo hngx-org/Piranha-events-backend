@@ -1,8 +1,8 @@
 # CONTRIBUTING
 
-Contributing to the HNGX Event App.
+Contributing to the HNGx Event App.
 
-Thank you for considering contributing to the HNGX Event Application! We welcome contributions from the community to help improve and maintain this project.
+Thank you for considering contributing to the HNGx Event Application! We welcome contributions from the community to help improve and maintain this project. Before you start working on your contribution, please read and follow these guidelines.
 
 # Getting Started
 
@@ -39,9 +39,13 @@ git push origin <your_feature_name>
 
 Please adhere to the following coding guidelines:
 
-- Follow the PEP 8 style guide for Python code.
+- Follow the PEP 8 style guide for Python code. Please make sure your code is formatted according to the standards and conventions described in this guide. You can use tools like [pycodestyle](https://pypi.org/project/pycodestyle/) to check for styling error and  [autopep8](https://marketplace.visualstudio.com/items?itemName=ms-python.autopep8) to automatically format your code.
+  
+- We useCapWords convention(no underscore) E.g. `EventPlanner` instead of `Event_Planner` or `Event_planner`. For model's attributes, we use snake_case e.g. `first_name`, `last_name` instead of camelCase. Field names should be all lowercase. See [Django Documentations](https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/) for guidance.
 
 - Write clear and concise commit messages
+
+Please follow this convention when you write or modify any code in this project.
 
 ## Testing
 
@@ -50,6 +54,9 @@ If your changes involve adding new features or modifying existing ones, make sur
 ## Reporting Issues
 
 If you encounter any issues or bugs, please report them by opening an issue in the GitHub repository. Provide detailed information about the problem, including steps to reproduce it.
+
+## Pull Requests
+When you are ready to submit, please create a pull request on GitHub. Please include a clear and concise description of what you have done and why you think it is useful to the project. If your contribution fixes a bug or implements a feature request, please link the relevant issue in your description.
 
 ## Review Process
 
