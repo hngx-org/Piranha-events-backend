@@ -24,46 +24,6 @@ The backend of this mobile application is built using Django, a powerful web fra
 4. **Event Overview**
    - **General Page:** A dedicated page showcasing all events, enabling users to explore and participate in various activities.
 
-## How to Run the Application
-
-1. Clone the repository:
-   ```
-   git clone https://github.com/TeamPinranha/hng-internship-app.git
-   ```
-
-2. Navigate to the project
-   ```
-   directory:cd hng-internship-app
-   ```
-   
-3. Set up a virtual environment (optional but recommended):
-  
-  ```
-  python3 -m venv venv
-  ```
-
-4. Activate the virtual environment:
-- **Windows:**
-  ```
-  venv\Scripts\activate
-  ```
-- **Unix or MacOS:**
-  ```
-  source venv/bin/activate
-  ```
-
-5. Install dependencies:
-
-   ```
-    pip install -r requirements.txt
-   ```
-
-6. Run the Django server:
-    ```
-    python manage.py runserver
-    ```
-    
-7. Open the application on your preferred web browser at `http://127.0.0.1:8000/`.
 
 ## Contributors
 
