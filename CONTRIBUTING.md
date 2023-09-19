@@ -1,6 +1,7 @@
-# CONTRIBUTING.md:
+# CONTRIBUTING
 
-Contributing to the HNGX Event App
+Contributing to the HNGX Event App.
+
 Thank you for considering contributing to the HNGX Event Application! We welcome contributions from the community to help improve and maintain this project.
 
 # Getting Started
