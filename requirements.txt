@@ -13,7 +13,7 @@ packaging==23.1
 Pillow==9.5.0
 pytz==2023.3.post1
 sqlparse==0.4.4
-typing-extensions==4.8.0
+typing-extensions==4.7.1
 tzdata==2023.3
 uritemplate==4.1.1
 whitenoise==6.5.0
