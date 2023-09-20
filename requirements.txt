@@ -8,7 +8,6 @@ packaging
 PyYAML
 sqlparse
 uritemplate
-backports.zoneinfo
 Pillow
 typing-extensions
 tzdata
