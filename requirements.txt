@@ -1,4 +1,18 @@
-asgiref==3.7.2
+
+asgiref
+Django
+djangorestframework
+drf-yasg
+inflection
+packaging
+PyYAML
+sqlparse
+uritemplate
+backports.zoneinfo;python_version<"3.9" # this is a conditional that installs backports.zoneinfo only for python versions older than 3.9
+Pillow
+typing-extensions
+tzdata
+requests
 backports.zoneinfo==0.2.1
 Brotli==1.1.0
 Django==4.2.5
@@ -9,7 +23,6 @@ inflection==0.5.1
 packaging==23.1
 Pillow==10.0.1
 pytz==2023.3.post1
-PyYAML==6.0.1
 sqlparse==0.4.4
 typing-extensions==4.8.0
 tzdata==2023.3
