@@ -6,14 +6,13 @@ import base64
 from .models import Event, Group, User_group, Comment, Image, InterestedEvent
 
 
-
-
 class EventSerializer(serializers.ModelSerializer):
     """EventSerializer class converts Event objects to and from JSON."""
 
     class Meta:
         model = Event
         fields = '__all__'
+
 
 class InterestedEventSerializer(serializers.ModelSerializer):
     """
@@ -33,7 +32,9 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class User_groupSerializer(serializers.ModelSerializer):
-    """User_groupSerializer class converts User_group objects to and from JSON."""
+    """
+    User_groupSerializer class converts User_group objects to and from JSON.
+    """
 
     class Meta:
         model = User_group
@@ -41,7 +42,9 @@ class User_groupSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    """This is a class serilializer, it converts comment objects to and from json"""
+    """
+    This is a class serilializer, it converts comment objects to and from json
+    """
 
     class Meta:
         model = Comment
@@ -61,4 +64,3 @@ class ImageSerializer(serializers.ModelSerializer):
         with obj.image_field.open() as img_file:
             img_data = base64.b64encode(img_file.read()).decode("utf-8")
         return img_data
-

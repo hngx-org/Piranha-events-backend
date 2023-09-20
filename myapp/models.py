@@ -5,7 +5,6 @@ import uuid
 # Create your models here.
 
 
-
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=250, unique=True)
@@ -21,14 +20,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
 
-# Interested Events Model
+#  Interested Events Model
 class InterestedEvent(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey("Event", on_delete=models.CASCADE)
 
     def __str__(self):
-        # Doubt this will work. Test to see.
-        return self.event.title # changed 'name' to 'title'
+        #  Doubt this will work. Test to see.
+        return self.event.title  # changed 'name' to 'title'
+
 
 # Images Model
 class Image(models.Model):
@@ -37,25 +37,30 @@ class Image(models.Model):
     image = models.ImageField()
 
     def __str__(self):
-        return str(self.image_id) # Added string (str)
+        return str(self.image_id)  # Added string (str)
+
 
 class Comment(models.Model):
+    """model structure for comments
+    """
     id = models.AutoField(primary_key=True)
     body = models.TextField(max_length=1024)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     event = models.ForeignKey("Event", on_delete=models.DO_NOTHING)
-    def __str__(self):
-        return self.user.username # added user
 
+    def __str__(self):
+        """str repr for comment model
+        """
+        return self.user.username  # added user
 
 
 class Group(models.Model):
     """model for group resource"""
     group_id = models.AutoField(primary_key=True)
-    group_name = models.CharField(max_length=20 )
-    description= models.CharField(max_length=100)
-    owner_id= models.ForeignKey("User", on_delete=models.DO_NOTHING)
-    created_at= models.DateField(auto_now_add=True)
+    group_name = models.CharField(max_length=20)
+    description = models.CharField(max_length=100)
+    owner_id = models.ForeignKey("User", on_delete=models.DO_NOTHING)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.group_name
@@ -63,9 +68,8 @@ class Group(models.Model):
 
 class User_group(models.Model):
     """model for the user group object"""
-    user= models.ForeignKey("User",on_delete=models.DO_NOTHING)
-    event= models.ForeignKey("Event", on_delete=models.DO_NOTHING)
-
+    user = models.ForeignKey("User", on_delete=models.DO_NOTHING)
+    event = models.ForeignKey("Event", on_delete=models.DO_NOTHING)
 
 
 class Event(models.Model):
@@ -79,11 +83,11 @@ class Event(models.Model):
     end_date = models.DateField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    thumbnail=models.ImageField(blank=True,upload_to='events/')
+    thumbnail = models.ImageField(blank=True, upload_to='events/')
 
     class Meta:
-        verbose_name ='Event'
-        verbose_name_plural = 'Events' # changed parenthesis
+        verbose_name = 'Event'
+        verbose_name_plural = 'Events'  # changed parenthesis
 
     def __str__(self):
         """String for representing the Model object."""
