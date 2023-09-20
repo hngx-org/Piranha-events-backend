@@ -98,7 +98,7 @@ def add_image_to_comment(request, commentId):
 
 @api_view(['GET'])
 def get_images_for_comment(request, commentId):
-    """Gets images for a comment"""
+    """Gets images for a comment of an invent"""
 
     try:
         comment = Comment.objects.get(pk=commentId)
