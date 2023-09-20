@@ -141,9 +141,6 @@ if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
 
 MEDIA_URL ='/images/'
 
-STATICFILES_DIRS =[
-    BASE_DIR/ 'static/'
-]
 
 MEDIA_ROOT ='static/images'
 
