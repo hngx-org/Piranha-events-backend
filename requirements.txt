@@ -10,7 +10,7 @@ drf-yasg==1.21.7
 gunicorn==21.2.0
 inflection==0.5.1
 packaging==23.1
-Pillow==10.0.1
+Pillow==9.5.0
 pytz==2023.3.post1
 sqlparse==0.4.4
 typing-extensions==4.8.0
