@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Event, Comment, Image, User
+from .models import Event, Comment, Image, User, Group, User_group
 import datetime
 
 
@@ -221,3 +221,74 @@ class CommentViewTestCases(TestCase):
         # assert that the object was deleted and only one object remains
         res = self.client.get(reverse("comment-list"))
         assert len(res.data) == 1
+
+
+class GroupViewTestCases(TestCase):
+    def setUp(self) -> None:
+        """
+        Set up test data and create an APIClient instance for making requests.
+        """
+        self.client = APIClient()
+        self.user = User.objects.create(username="test_username", email="test_email", password="test_password")
+
+        self.group = Group.objects.create(name="test_group", description="test_description", creator_id=self.user)
+
+        User_group.objects.create(user=self.user, group=self.group)
+
+    def test_create_group(self):
+        """
+        Test creating a new group.
+        """
+        url = reverse("group-create")
+        data = {"name": "Test Group", "description": "Test Description", "creator_id": self.user}
+
+        res = self.client.post(url, data)
+
+        assert res.status_code == 201
+        assert res.data["id"]
+        assert res.data["name"] == data["name"]
+    
+
+    def test_list_groups(self):
+        """
+        Test listing groups.
+        """
+        url = reverse("group-list")
+
+        res = self.client.get(url)
+
+        assert len(res.data) == 1
+        assert res.status_code == 200
+    
+
+    def test_retrieve_group(self):
+        """
+        Test retrieving a specific group.
+        """
+        group = Group.objects.get(pk=1)
+        url = reverse("group-retrieve", kwargs={"pk", group.id})
+
+        res = self.client.get(url)
+        assert res.status_code == 200
+        assert res.data["id"] == group.id
+        assert res.data["name"] == group.name
+        assert res.data["description"] == group.description
+        assert res.data["creator_id"] == group.creator_id
+        assert res.data["users"] == group.users
+    
+
+    def test_update_group(self):
+        """
+        Test updating a group.
+        """
+        group = Group.objects.get(pk=1)
+        url = reverse("group-update", kwargs={"pk", group.id})
+
+        update_data = {"name": "Updated name", "description": "Updated description"}
+        res = self.client.patch(url, update_data, content_type="application/json")
+
+        updated_group = Group.objects.get(pk=group.id)
+
+        assert res.status_code == 200
+        assert res.data["name"] == updated_group.name
+        assert res.data["description"] == updated_group.description
