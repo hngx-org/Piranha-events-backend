@@ -8,7 +8,7 @@ packaging
 PyYAML
 sqlparse
 uritemplate
-backports.zoneinfo;python_version<"3.9" # this is a conditional that installs backports.zoneinfo only for python versions older than 3.9
+backports.zoneinfo
 Pillow
 typing-extensions
 tzdata
