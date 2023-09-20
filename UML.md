@@ -1,6 +1,6 @@
 # Class UML Diagram For Event App Base On [User_Event_App_Workflow.txt](User_Event_App_Workflow.txt)
  
-  ![Class UML Diagram](IMGs/image.png)
+   ![Class UML Diagram](IMGs/image.png)
 
   ## Notes
   
@@ -37,9 +37,11 @@
   ## Some few changes were made based on the new design
 
    ### added updates
+   
     - other `Users` can comment on newly created events
     - comments can also be liked
     - `Users` can reply to comments on newly created events
 
    ### reviewed changes
+
     - Notifications
