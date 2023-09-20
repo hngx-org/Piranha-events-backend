@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = os.environ.get("DEBUG", default="True")
 
 ALLOWED_HOSTS = []
 
@@ -142,7 +142,7 @@ if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
 MEDIA_URL ='/images/'
 
 STATICFILES_DIRS =[
-    BASE_DIR/ 'static'
+    BASE_DIR/ 'static/'
 ]
 
 MEDIA_ROOT ='static/images'
