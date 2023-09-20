@@ -11,4 +11,8 @@ urlpatterns = [
     path('api/events/<int:eventId>/comments/', get_comments, name='get-comments'),
     path('api/comments/<int:commentId>/images/', add_image_to_comment, name='add-image-to-comment'),
     path('api/comments/<int:commentId>/images/', get_images_for_comment, name='get-images-for-comment'),
+    # Express interest in an event
+    path('api/users/<int:userId>/interests/<int:eventId>/', express_interest, name='express-interest'),
+    # Remove interest in an event
+    path('api/users/<int:userId>/interests/<int:eventId>/', remove_interest, name='remove-interest'),
 ]
