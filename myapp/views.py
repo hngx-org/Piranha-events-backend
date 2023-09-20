@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework.response import Response 
+from rest_framework.response import Response
+from .models import Event
 from .serializers import EventSerializer
 from rest_framework import status
 from .models import Event, Comment
