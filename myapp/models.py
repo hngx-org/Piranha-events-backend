@@ -5,6 +5,11 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 # Create your models here.
 
 
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=250, unique=True)
@@ -59,7 +64,7 @@ class Event(models.Model):
     end_date = models.DateField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    thumbnail=models.ImageField(blank=True,upload_to='events/') 
+    thumbnail= models.ImageField(upload_to=upload_to, blank=True) 
 
     class Meta:
         verbose_name ='Event'
