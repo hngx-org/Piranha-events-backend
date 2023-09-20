@@ -28,16 +28,16 @@ class InterestedEvent(models.Model):
 
     def __str__(self):
         # Doubt this will work. Test to see.
-        return self.event.name
+        return self.event.title # changed 'name' to 'title'
 
 # Images Model
 class Image(models.Model):
     image_id = models.AutoField(primary_key=True)
-    comment = models.ForeignKey("comment", on_delete=models.CASCADE)
+    comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
     image = models.ImageField()
 
     def __str__(self):
-        return self.image_id
+        return str(self.image_id) # Added string (str)
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
@@ -45,7 +45,7 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     event = models.ForeignKey("Event", on_delete=models.DO_NOTHING)
     def __str__(self):
-        return self.username
+        return self.user.username # added user
 
 
 
@@ -83,7 +83,7 @@ class Event(models.Model):
 
     class Meta:
         verbose_name ='Event'
-        verbose_name_plural = ("Events")
+        verbose_name_plural = 'Events' # changed parenthesis
 
     def __str__(self):
         """String for representing the Model object."""
