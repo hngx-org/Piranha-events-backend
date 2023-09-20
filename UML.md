@@ -35,9 +35,11 @@
           This attribute signifies which user has administrative rights and control over the specific group.
 
   ## Some few changes were made based on the new design
+  
     ### added updates
     - other `Users` can comment on newly created events
     - comments can also be liked
     - `Users` can reply to comments on newly created events
+
    ### reviewed changes
     - Notifications
