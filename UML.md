@@ -14,7 +14,7 @@
       1. The User_Role class represents the roles that users can have within groups in your event app.
          It's a pivotal part of your application's access control and permissions system.
          
-        ![Sub Set Of UML Class; User_role](IMGs/User_Role.png)
+           ![Sub Set Of UML Class; User_role](IMGs/User_Role.png)
 
         - `role_id: int:` This attribute is an identifier for each unique role record in the User_Role table.
           It typically serves as the primary key.
@@ -25,16 +25,17 @@
         - `group_id: int:` This attribute indicates the group to which the role is associated.
           It is also a foreign key, linking the User_Role class to the Group class and specifying which group the user has a role in.
         
-        - `role: str`: This attribute represents the actual role or position that the user holds within the group. Examples of roles might include "Admin," "Member," "Moderator," or any other custom roles you define within your application.
+        - `role: str`: This attribute represents the actual role or position that the user holds within the group
+        Examples of roles might include "Admin," "Member," "Moderator," or any other custom roles you define within your application.
 
-        The `User_Role` class helps manage and enforce access control and permissions within your event app. By associating users with specific roles in specific groups, you can regulate what actions each user is allowed to perform within those groups. For instance, users with the "Admin" role might have elevated privileges, while "Members" might have more limited access.
+      The `User_Role` class helps manage and enforce access control and permissions within your event app. By associating users with specific roles in specific groups, you can regulate what actions each user is allowed to perform within those groups. For instance, users with the "Admin" role might have elevated privileges, while "Members" might have more limited access.
 
    - Group owners have administrative rights over their groups (owner_id in Group).
     - eg.
        1. The owner_id in the Group class represents the user who is the owner or administrator of the group.
           This attribute signifies which user has administrative rights and control over the specific group.
 
-  ## Some few changes were made based on the new design
+<hr>
 
    ### added updates
 
