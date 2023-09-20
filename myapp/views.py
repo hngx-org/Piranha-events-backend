@@ -1,26 +1,28 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 
-from .models import Event,Group
-from .serializers import EventSerializer
+
 from rest_framework import status
 
-from .models import User, Event, Comment, InterestedEvent,User_group
-
-
+from .models import User, Event, Comment, InterestedEvent,User_group, Group, Image
 
 from .serializers import CommentSerializer, ImageSerializer
 from .serializers import GroupSerializer, User_groupSerializer,InterestedEventSerializer
 
-from .models import Image
+from .serializers import GroupSerializer, User_groupSerializer, EventSerializer, CommentSerializer, ImageSerializer
 
-from rest_framework.decorators import api_view
+
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework import permissions
+
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+
 
 
 @api_view(['POST'])
@@ -160,6 +162,7 @@ def create_goup(request):
 
 
 @api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
 def get_groups(request):
     """gets all groups"""
     groups = Group.objects.all()
