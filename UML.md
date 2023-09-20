@@ -8,7 +8,7 @@
    - Users can create events (association between User and Event).
    - Users can belong to multiple groups (many-to-many association between User and Group).
    - Groups can contain multiple events (one-to-many association between Group and Event). 
-   - Users can RSVP to events (many-to-many association between User). 
+   - Users can declare interest to event to events (many-to-many association between User). 
    - Users can have different roles within groups (many-to-many association between User and Group via User_Role).
     - eg
       1. The User_Role class represents the roles that users can have within groups in your event app.
@@ -32,4 +32,12 @@
    - Group owners have administrative rights over their groups (owner_id in Group).
     - eg.
        1. The owner_id in the Group class represents the user who is the owner or administrator of the group.
-          This attribute signifies which user has administrative rights and control over the specific group. 
+          This attribute signifies which user has administrative rights and control over the specific group.
+
+  ## Some few changes were made based on the new design
+    ### added updates
+    - other `Users` can comment on newly created events
+    - comments can also be liked
+    - `Users` can reply to comments on newly created events
+   ### reviewed changes
+    - Notifications

@@ -1,8 +1,8 @@
 Event App User Flow and Key Features
 
-After thorough analysis by available team members in our meeting earlier today, here's a concise overview of our event app built on Django Rest Framework, including user authentication via Google and Twitter. This will help us understand the system's flow and its key components:
+After thorough analysis by available team members in our meeting earlier today[18th september], here's a concise overview of our event app built on Django Rest Framework, including user authentication via Google and Twitter. This will help us understand the system's flow and its key components:
 1.User Registration and Authentication:
-- Users can register and log in using their Google or Twitter accounts.
+- Users can register and log in using their Google accounts
 - OAuth2.0 is implemented for seamless authentication with these platforms.
 2. User Groups:
 - Users can create or join groups.
