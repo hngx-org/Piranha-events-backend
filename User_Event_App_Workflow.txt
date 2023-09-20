@@ -1,0 +1,36 @@
+Event App User Flow and Key Features
+
+After thorough analysis by available team members in our meeting earlier today[18th september], here's a concise overview of our event app built on Django Rest Framework, including user authentication via Google and Twitter. This will help us understand the system's flow and its key components:
+1.User Registration and Authentication:
+- Users can register and log in using their Google accounts
+- OAuth2.0 is implemented for seamless authentication with these platforms.
+2. User Groups:
+- Users can create or join groups.
+- Groups are central to our app and act as containers for events.
+- Users can belong to multiple groups.
+3. Events:
+- Events are created within groups.
+- Users can create events and associate them with specific groups.
+- Events have attributes like start date, end date, location, and descriptions groups.
+
+- Users can indicate interest to events they plan to attend.
+
+4. Permissions and Access Control:
+
+- Access to group-related actions and events is permission-based.
+
+- Group owners have administrative rights over their groups and events.
+
+- Users can have different roles within groups, determining their level of control and access.
+
+5. User Profiles:
+
+Users can customize their profiles with personal information, avatars, etc.
+
+6. API Endpoints:
+
+- We'll design RESTful API endpoints for all key functionalities, facilitating communication between the frontend and backend.
+
+Database Schema:
+
+User-related data, groups, events, and their relationships are stored in the database.
