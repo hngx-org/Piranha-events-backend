@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # local app
     "myapp.apps.MyappConfig",
     "rest_framework",
+    'drf_yasg',
  
 ]
 
@@ -127,9 +128,9 @@ STATIC_URL = "static/"
 
 MEDIA_URL ='/images/'
 
-STATICFILES_DIRS =[
-    BASE_DIR/ 'static'
-]
+# STATICFILES_DIRS =[
+#     BASE_DIR/ 'static'
+# ]
 
 MEDIA_ROOT ='static/images'
 
