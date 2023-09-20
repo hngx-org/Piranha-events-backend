@@ -12,45 +12,48 @@ class User(AbstractBaseUser, PermissionsMixin):
     avatar = models.CharField(max_length=255)
     oauth_token = models.CharField(max_length=255)
 
+    USERNAME_FIELD= 'email'
+    REQUIRED_FIELDS=['name']
+
     def __str__(self):
         return self.username  
 
 
 
-class Group(models.Model):
+class group(models.Model):
     group_id = models.AutoField(primary_key=True)
     group_name = models.CharField(max_length=20 )
     description= models.CharField(max_length=100)
-    owner_id= models.ForeignKey(User.user_id)
+    owner_id= models.ForeignKey(User , on_delete=models.CASCADE)
     created_at= models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.group_name
 
 
-class Event(models.Model):
-    event_id = models.AutoField(primary_key=True)
-    event_name= models.CharField(max_length=50)
-    start_date= models.DateField(auto_now_add=True)
-    end_date= models.DateField()
-    locaion= models.CharField(max_length=100)
-    description= models.CharField(max_length=100)
+# class Event(models.Model):
+#     event_id = models.AutoField(primary_key=True)
+#     event_name= models.CharField(max_length=50)
+#     start_date= models.DateField(auto_now_add=True)
+#     end_date= models.DateField()
+#     locaion= models.CharField(max_length=100)
+#     description= models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.event_name
+#     def __str__(self):
+#         return self.event_name
 
-class User_group(models.Model):
-    user= models.ForeignKey("User")
-    event= models.ForeignKey("Event")
+class user_group(models.Model):
+    user= models.ForeignKey("User" ,on_delete= models.CASCADE)
+    event= models.ForeignKey("Event", on_delete=models.CASCADE)
 
 
 
 class Event(models.Model):
     """Model representing an event."""
-    id = models.AutoField(primary_key=True, max_length=60)
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=60)
     description = models.CharField(max_length=1024)
-    creator_id = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    creator_id = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=1024)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -65,4 +68,18 @@ class Event(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return self.title
+
+
+
+
+class Comments(models.Model):
+    id= models.AutoField(primary_key=True)
+    body= models.CharField(max_length=255)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Likes (models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment_id= models.ForeignKey(Comments, on_delete=models.CASCADE)
+
       
