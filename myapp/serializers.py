@@ -1,8 +1,11 @@
 from rest_framework import serializers
+
 import base64
 
 
-from .models import Event, Group, User_group, Comment, Image
+from .models import Event, Group, User_group, Comment, Image, InterestedEvent
+
+
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -10,6 +13,14 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
+        fields = '__all__'
+
+class InterestedEventSerializer(serializers.ModelSerializer):
+    """
+    serialise InterestedEvent to and from JSON
+    """
+    class Meta:
+        model = InterestedEvent
         fields = "__all__"
 
 
@@ -50,3 +61,4 @@ class ImageSerializer(serializers.ModelSerializer):
         with obj.image_field.open() as img_file:
             img_data = base64.b64encode(img_file.read()).decode("utf-8")
         return img_data
+
