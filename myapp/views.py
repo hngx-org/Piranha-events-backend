@@ -6,73 +6,23 @@ from rest_framework import status
 
 from .models import User, Event, Comment, InterestedEvent,User_group, Group, Image
 
+from .serializers import CommentSerializer, ImageSerializer
+from .serializers import GroupSerializer, User_groupSerializer,InterestedEventSerializer
+
 from .serializers import GroupSerializer, User_groupSerializer, EventSerializer, CommentSerializer, ImageSerializer
+
 
 from rest_framework.decorators import api_view,permission_classes
 from rest_framework import permissions
 
 from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
 
 
-"""This view returns a list of all events."""
-@api_view(['GET'])
-@permission_classes((permissions.AllowAny,))
-def eventList (request): 
-    try: 
-        events = Event.objects.all()
-    except Event.DoesNotExist:
-        return Response({'error': 'No Event list'}, status=status.HTTP_404_NOT_FOUND)
-    serializer = EventSerializer(events, many=True) 
-    return Response (serializer.data)
-
-
-"""This view returns the details of a specific event."""
-@api_view(['GET'])
-@permission_classes((permissions.AllowAny,))
-def eventDetail(request, pk):
-    try:
-        event = Event.objects.get(id=pk)
-    except Event.DoesNotExist:
-        return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    serializer = EventSerializer(event, many=False) 
-    return Response(serializer.data)
-
-
-
-"""This view creates a new event. """
-@api_view(['POST'])
-@permission_classes((permissions.AllowAny,))
-def eventCreate(request) :
-    serializer = EventSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response (serializer.data)
-
-"""This view updates an event. """
-@api_view(['PUT'])
-@permission_classes((permissions.AllowAny,))
-def eventUpdate(request, pk):
-    try:
-        event = Event.objects.get(id=pk)
-    except Event.DoesNotExist:
-        return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-    serializer = EventSerializer (instance=event, data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
-
-
-"""This view deletes an event. """
-@api_view(['DELETE'])
-@permission_classes((permissions.AllowAny,))
-def eventDelete (request, pk):
-    try:
-        event = Event.objects.get(id=pk) 
-    except Event.DoesNotExist:
-        return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-    event.delete()
-    return Response ('Deleted')
 
 
 @api_view(['POST'])
