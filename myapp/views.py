@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework. response import Response 
-from .models import Event
-from .serializers import EventSerializer
+from .models import *
+from .serializers import *
 from rest_framework.decorators import api_view
 
 """This view returns a list of all events."""
@@ -43,3 +43,21 @@ def eventDelete (request, pk):
     event = Event.objects.get(id=pk) 
     event.delete()
     return Response ('Deleted')
+
+# *** USER MANAGEMENT VIEWS ***
+
+@api_view(['GET'])
+def userGet(request, pk):
+    """Retrieves a user's detail using primary key. Returns 404 if none."""
+    user = get_object_or_404(User, pk=pk)
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
+
+@api_view(['PUT'])
+def userUpdate(request, pk):
+    """Updates an existing user's detail. Returns 404 if user doesn't exist"""
+    user = get_object_or_404(User, pk=pk)
+    serializer = UserSerializer(instance=user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)

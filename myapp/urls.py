@@ -7,4 +7,6 @@ urlpatterns = [
     path('events/create/', eventCreate, name='event-create'),
     path('events/<int:pk>/update/', eventUpdate, name='event-update'),
     path('events/<int:pk>/delete/', eventDelete, name='event-delete'),
+    path('users/<int:pk>', userGet, name='user-get'),
+    path('users/<int:pk>', userUpdate, name='user-update'),
 ]
