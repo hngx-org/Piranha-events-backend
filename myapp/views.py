@@ -1,10 +1,14 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from .models import Event, Image, Group
-from .serializers import EventSerializer, GroupSerializer
+
+from .models import Event,Group,User_group
+from .serializers import EventSerializer
 from rest_framework import status
 from .models import Event, Comment
-#from .serializers import CommentSerializer, ImageSerializer
+from .serializers import CommentSerializer, ImageSerializer
+from .serializers import GroupSerializer, User_groupSerializer
+from .models import Image
+
 from rest_framework.decorators import api_view
 
 """This view returns a list of all events."""
@@ -96,7 +100,7 @@ def add_image_to_comment(request, commentId):
 
 @api_view(['GET'])
 def get_images_for_comment(request, commentId):
-    """Gets images for a comment"""
+    """Gets images for a comment of an invent"""
 
     try:
         comment = Comment.objects.get(pk=commentId)
@@ -143,6 +147,44 @@ def groupDetail(request, pk):
         group.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['POST'])
+def create_goup(request):
+    """creates a new group"""
+    serializer = GroupSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response (serializer.data)
 
 
+@api_view(['GET'])
+def get_groups(request):
+    """gets all groups"""
+    groups = Group.objects.all()
+    serializer = GroupSerializer(groups, many=True)
+    return Response (serializer.data)
 
+
+@api_view(['GET'])
+def get_specific_group(request, pk):
+    """gets a specific group details"""
+    groups = Group.objects.get(id=pk)
+    serializer = GroupSerializer(groups, many=False)
+    return Response (serializer.data)
+
+
+@api_view(['PUT'])
+def update_group(request, pk):
+    """updates a group details"""
+    group = Group.objects.get(id=pk)
+    serializer = GroupSerializer (instance=group, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def delete_group(request, pk):
+    """deletes a group"""
+    group = Group.objects.get(id=pk)
+    group.delete()
+    return Response ('Deleted')
