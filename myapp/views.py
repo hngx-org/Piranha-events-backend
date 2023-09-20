@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework. response import Response 
+from rest_framework.response import Response # Corrected this line
 from .models import Event
 from .serializers import EventSerializer
 from rest_framework.decorators import api_view
