@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = os.environ.get("DEBUG", default="True")
 
 ALLOWED_HOSTS = []
 
@@ -131,6 +131,7 @@ USE_TZ = True
 # This setting tells Django at which URL static files are going to be served to the user.
 # Here, they well be accessible at your-domain.onrender.com/static/...
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Following settings only make sense on production and may break development environments.
 if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
     # in your application directory on Render.
@@ -141,9 +142,6 @@ if not DEBUG:    # Tell Django to copy statics to the `staticfiles` directory
 
 MEDIA_URL ='/images/'
 
-STATICFILES_DIRS =[
-    BASE_DIR/ 'static'
-]
 
 MEDIA_ROOT ='static/images'
 
