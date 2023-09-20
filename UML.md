@@ -37,11 +37,11 @@
   ## Some few changes were made based on the new design
 
    ### added updates
-   
-    - other `Users` can comment on newly created events
-    - comments can also be liked
-    - `Users` can reply to comments on newly created events
+
+  - other `Users` can comment on newly created events
+  - comments can also be liked
+  - `Users` can reply to comments on newly created events
 
    ### reviewed changes
 
-    - Notifications
+  - Notifications
