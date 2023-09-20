@@ -5,30 +5,42 @@ from .models import Event,Group,User_group
 from .serializers import EventSerializer
 from rest_framework import status
 from .models import Event, Comment
-from .serializers import CommentSerializer, ImageSerializer
+from .serializers import CommentSerializer #, ImageSerializer
 from .serializers import GroupSerializer, User_groupSerializer
 from .models import Image
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
+from rest_framework import permissions
 
 """This view returns a list of all events."""
 @api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
 def eventList (request): 
-    events = Event.objects.all()
+    try: 
+        events = Event.objects.all()
+    except Event.DoesNotExist:
+        return Response({'error': 'No Event list'}, status=status.HTTP_404_NOT_FOUND)
     serializer = EventSerializer(events, many=True) 
     return Response (serializer.data)
 
 
 """This view returns the details of a specific event."""
 @api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
 def eventDetail(request, pk):
-    events = Event.objects.get(id=pk)
-    serializer = EventSerializer(events, many=False) 
-    return Response (serializer.data)
+    try:
+        event = Event.objects.get(id=pk)
+    except Event.DoesNotExist:
+        return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = EventSerializer(event, many=False) 
+    return Response(serializer.data)
+
 
 
 """This view creates a new event. """
 @api_view(['POST'])
+@permission_classes((permissions.AllowAny,))
 def eventCreate(request) :
     serializer = EventSerializer(data=request.data)
     if serializer.is_valid():
@@ -37,8 +49,12 @@ def eventCreate(request) :
 
 """This view updates an event. """
 @api_view(['PUT'])
+@permission_classes((permissions.AllowAny,))
 def eventUpdate(request, pk):
-    event = Event.objects.get(id=pk)
+    try:
+        event = Event.objects.get(id=pk)
+    except Event.DoesNotExist:
+        return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
     serializer = EventSerializer (instance=event, data=request.data)
     if serializer.is_valid():
         serializer.save()
@@ -47,8 +63,12 @@ def eventUpdate(request, pk):
 
 """This view deletes an event. """
 @api_view(['DELETE'])
+@permission_classes((permissions.AllowAny,))
 def eventDelete (request, pk):
-    event = Event.objects.get(id=pk) 
+    try:
+        event = Event.objects.get(id=pk) 
+    except Event.DoesNotExist:
+        return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
     event.delete()
     return Response ('Deleted')
 
@@ -157,6 +177,7 @@ def create_goup(request):
 
 
 @api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
 def get_groups(request):
     """gets all groups"""
     groups = Group.objects.all()
