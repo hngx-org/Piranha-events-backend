@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 import uuid
+from myapp.custom_user_manager import CustomUserManager
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
@@ -27,8 +28,9 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=250, unique=True)
+    username = models.CharField(max_length=250, unique=True)
     email = models.EmailField(unique=True)
+    is_staff = models.BooleanField(default=False)
     avatar = models.CharField(max_length=255, blank=True, null=True)
     access_token = models.CharField(max_length=255)
     refresh_token = models.CharField(max_length=255)
@@ -37,6 +39,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = CustomUserManager()
 
+
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
@@ -126,7 +130,7 @@ class UserGroup(models.Model):
         return self.group_id
     
     class Meta:
-        db_table = 'user_groups'
+        db_table = 'user_groups_table'
 
 
 # class GroupEvent(models.Model):
