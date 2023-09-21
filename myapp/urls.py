@@ -1,13 +1,16 @@
 from django.urls import path,include
 from .views import *
 from rest_framework.routers import DefaultRouter
-from .views import EventViewSet
+from .views import EventViewSet, GoogleLoginView
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
 
 
 urlpatterns = [
+    # google auth 
+    path('auth/', GoogleLoginView.as_view(), name='google-login'), # full url path: api/accounts/auth
+    
     path('users/<int:pk>', userGet, name='user-get'),
     path('users/<int:pk>/update', userUpdate, name='user-update'),
 
@@ -36,7 +39,6 @@ urlpatterns = [
     path('groups/', get_groups, name='group-list'),
 
     
-
     path('groups/<int:groupId>/members/<int:userId>', add_user_to_group, name='group-user-create'),
     path('groups/<int:groupId>/members/<int:userId>', remove_user_from_group, name='group-user-delete'),
     path('groups/<int:groupId>/members/', group_members_list, name='group-members-list'),

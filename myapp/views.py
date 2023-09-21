@@ -1,15 +1,27 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from .models import *
 from .serializers import *
 from rest_framework import status, permissions, viewsets,generics
 from rest_framework.decorators import api_view, permission_classes
 from .models import User, Group
 
+from allauth.socialaccount.providers.base.views import SocialLoginView
+from allauth.socialaccount.providers.google.adapter import GoogleOAuth2Adapter
+from .serializers import GoogleLoginSerializer
+
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+
+class GoogleLoginView(SocialLoginView):
+    """view for Google signup"""
+    adapter_class = GoogleOAuth2Adapter
+    # using the serializer class
+    serializer_class = GoogleLoginSerializer
 
 
 @api_view(['POST'])
