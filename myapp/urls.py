@@ -30,9 +30,9 @@ urlpatterns = [
     path('users/<int:userId>/interests/<int:eventId>/', remove_interest, name='remove-interest'),
 
     path('groups/',create_goup, name='group-create'),
-    path('groups/<int:groupId>/', get_specific_group, name='group-detail'),
-    path('groups/<int:groupId>/', update_group, name='group-update'),
-    path('groups/<int:groupId>/', delete_group, name='group-delete'),
+    path('groups/<int:pk>/', get_specific_group, name='group-detail'),
+    path('groups/<int:pk>/', update_group, name='group-update'),
+    path('groups/<int:pk>/', delete_group, name='group-delete'),
     path('groups/', get_groups, name='group-list'),
 
     
