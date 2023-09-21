@@ -91,17 +91,17 @@ class Comment(models.Model):
     
     class Meta:
         db_table = 'comments'
-        
+
     def __str__(self):
         return self.body
-    
+
 class CommentImages(models.Model):
     comment_id = models.ForeignKey(Comment, on_delete=models.DO_NOTHING)
-    image_id = models.ForeignKey(Image, on_delete=models.DO_NOTHING)   
+    image_id = models.ForeignKey(Image, on_delete=models.DO_NOTHING)
     class Meta:
         db_table = 'comment_images'
-        
-        
+
+
 class Group(models.Model):
     """model for group resource"""
     title = models.CharField(max_length=255)
