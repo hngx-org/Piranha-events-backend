@@ -1,28 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
-
-
-from rest_framework import status
-
-from .models import User, Event, Comment, InterestedEvent,User_group, Group, Image
-
-from .serializers import CommentSerializer, ImageSerializer
-from .serializers import GroupSerializer, User_groupSerializer,InterestedEventSerializer
-
-from .serializers import GroupSerializer, User_groupSerializer, EventSerializer, CommentSerializer, ImageSerializer
-
-
-from rest_framework.decorators import api_view,permission_classes
-from rest_framework import permissions
-
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
+from .models import *
+from .serializers import *
+from rest_framework import status, permissions, viewsets
+from rest_framework.decorators import api_view, permission_classes
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-
-
 
 
 @api_view(['POST'])
@@ -160,7 +145,6 @@ def create_goup(request):
         serializer.save()
     return Response (serializer.data)
 
-
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
 def get_groups(request):
@@ -194,3 +178,31 @@ def delete_group(request, pk):
     group = Group.objects.get(id=pk)
     group.delete()
     return Response ('Deleted')
+
+# *** USER MANAGEMENT VIEWS ***
+
+@api_view(['GET'])
+def userGet(request, pk):
+    """Retrieves a user's detail using primary key. Returns 404 if none."""
+    user = get_object_or_404(User, pk=pk)
+
+    if User.objects.filter(pk=pk).exists():
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['PUT'])
+def userUpdate(request, pk):
+    """Updates an existing user's detail. Returns 404 if user doesn't exist"""
+    user = get_object_or_404(User, pk=pk)
+
+    if not User.objects.filter(pk=pk).exists():
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = UserSerializer(instance=user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            
+    return Response(serializer.data)

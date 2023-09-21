@@ -3,10 +3,7 @@ from rest_framework import serializers
 import base64
 
 
-from .models import Event, Group, User_group, Comment, Image, InterestedEvent
-
-
-
+from .models import *
 
 class EventSerializer(serializers.ModelSerializer):
     """EventSerializer class converts Event objects to and from JSON."""
@@ -62,3 +59,8 @@ class ImageSerializer(serializers.ModelSerializer):
             img_data = base64.b64encode(img_file.read()).decode("utf-8")
         return img_data
 
+class UserSerializer(serializers.ModelSerializer):
+    """User Serializer"""
+    class Meta:
+        model = User
+        fields = '__all__'

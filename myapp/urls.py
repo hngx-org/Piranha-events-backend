@@ -29,4 +29,8 @@ urlpatterns = [
     path('groups/<int:groupId>/update', update_group, name='group-update'),
     path('groups/<int:groupId>/delete', delete_group, name='group-delete'),
 
+    path('users/<int:pk>', userGet, name='user-get'),
+    path('users/<int:pk>/update', userUpdate, name='user-update'),
+
 ]
+
