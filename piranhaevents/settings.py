@@ -47,9 +47,9 @@ INSTALLED_APPS = [
     "rest_framework",
     'drf_yasg',
 
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount.providers.google',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 
@@ -76,7 +76,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "allauth.account.middleware.AccountMiddleware",
     
 ]
 
@@ -84,7 +83,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'allauth.account.auth_backends.AuthenticationBackend',
+        # 'allauth.account.auth_backends.AuthenticationBackend',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
