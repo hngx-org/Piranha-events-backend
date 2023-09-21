@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from django.core import validators
+from .models import Group
 
 import base64
 
@@ -27,7 +29,14 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = "__all__"
+    
+    title = models.CharField(max_length=255)
 
+    # Add validation for the title field
+    def validate_title(self, value):
+        if not value.strip():  # Check if the title is empty or contains only whitespace
+            raise serializers.ValidationError("Title cannot be empty or contain only whitespace.")
+        return value
 
 class UserGroupSerializer(serializers.ModelSerializer):
     """User_groupSerializer class converts User_group objects to and from JSON."""
