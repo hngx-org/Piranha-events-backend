@@ -17,6 +17,7 @@ from rest_framework import permissions
 
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from django.http import Http404
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -73,6 +74,12 @@ def add_comment(request, eventId):
             serializer.save(event=event)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+def get_event_or_404(eventId):
+    try:
+        return Event.objects.get(pk=eventId)
+    except Event.DoesNotExist:
+        raise Http404
 
 @api_view(['GET'])
 def get_comments(request, eventId):
@@ -86,6 +93,14 @@ def get_comments(request, eventId):
         comments = Comment.objects.filter(event=event)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+    
+def get_comments_queryset(eventId):
+    try:
+        event = Event.objects.get(pk=eventId)
+    except Event.DoesNotExist:
+        return Comment.objects.none()
+    
+    return Comment.objects.filter(event=event)
 
 @api_view(['POST'])
 def add_image_to_comment(request, commentId):
@@ -102,6 +117,13 @@ def add_image_to_comment(request, commentId):
             serializer.save(comment=comment)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def get_images_for_comment_queryset(commentId):
+    try:
+        comment = Comment.objects.get(pk=commentId)
+    except Comment.DoesNotExist:
+        return Image.objects.none()
+    
+    return Image.objects.filter(comment=comment)
 
 @api_view(['GET'])
 def get_images_for_comment(request, commentId):
