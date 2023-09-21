@@ -44,11 +44,10 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 
 **Activate the virtual environment:**
 
-    ```bash
-
-    Linux: source venv/bin/activate   
-    
-    Windows: source venv\Scripts\activate
+    ```sh
+        Linux: source venv/bin/activate   
+        
+        Windows: source venv\Scripts\activate
     ```
 
 **Install dependencies:**
