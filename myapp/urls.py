@@ -16,6 +16,10 @@ urlpatterns = [
   
     path('events/<int:eventId>/comments/', add_comment, name='add-comment'),
     path('events/<int:eventId>/comments/', get_comments, name='get-comments'),
+
+    # image
+    path('images/', ImageListCreateView.as_view(), name='image-list-create'),
+    path('images/<int:pk>/', ImageDetailView.as_view(), name='image-detail'),
   
     path('comments/<int:commentId>/images/', add_image_to_comment, name='add-image-to-comment'),
     path('comments/<int:commentId>/images/', get_images_for_comment, name='get-images-for-comment'),
@@ -30,6 +34,8 @@ urlpatterns = [
     path('groups/<int:groupId>/', update_group, name='group-update'),
     path('groups/<int:groupId>/', delete_group, name='group-delete'),
     path('groups/', get_groups, name='group-list'),
+
+    
 
     path('groups/<int:groupId>/members/<int:userId>', add_user_to_group, name='group-user-create'),
     path('groups/<int:groupId>/members/<int:userId>', remove_user_from_group, name='group-user-delete'),
