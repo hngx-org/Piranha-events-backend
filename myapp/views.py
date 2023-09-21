@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 from .models import *
 from .serializers import *
-from rest_framework import status, permissions, viewsets
+from rest_framework import status, permissions, viewsets,generics
 from rest_framework.decorators import api_view, permission_classes
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -71,6 +71,15 @@ def get_comments(request, eventId):
         comments = Comment.objects.filter(event=event)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
+    
+# to add image,update, delete and to view
+class ImageListCreateView(generics.ListCreateAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+
+class ImageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
 
 @api_view(['POST'])
 def add_image_to_comment(request, commentId):

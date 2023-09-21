@@ -29,11 +29,11 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class User_groupSerializer(serializers.ModelSerializer):
+class UserGroupSerializer(serializers.ModelSerializer):
     """User_groupSerializer class converts User_group objects to and from JSON."""
 
     class Meta:
-        model = User_group
+        model =  UserGroup
         fields = "__all__"
 
 
