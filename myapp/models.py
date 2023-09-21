@@ -2,7 +2,7 @@ from tabnanny import verbose
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-import uuid
+
 # Create your models here.
 
 class CustomUserManager(BaseUserManager):
@@ -78,11 +78,11 @@ class Event(models.Model):
         """String for representing the Model object."""
         return self.title
     
-# class EventThumbnail(models.Model):
-#     image_id()
-#     event_id()
-#     class Meta:
-#         db_table = 'event_thumbnail'
+class EventThumbnail(models.Model):
+    image_id = models.ForeignKey(Image, on_delete=models.DO_NOTHING)
+    event_id = models.ForeignKey(Event, on_delete=models.DO_NOTHING)
+    class Meta:
+        db_table = 'event_thumbnail'
 
 class Comment(models.Model):
     body = models.TextField(max_length=1024)
@@ -91,18 +91,17 @@ class Comment(models.Model):
     
     class Meta:
         db_table = 'comments'
-        
+
     def __str__(self):
         return self.body
-    
-# class CommentImages(models.Model):
-#     comment_id()
-#     image_id()
-    
-#     class Meta:
-#         db_table = 'comment_images'
-        
-        
+
+class CommentImages(models.Model):
+    comment_id = models.ForeignKey(Comment, on_delete=models.DO_NOTHING)
+    image_id = models.ForeignKey(Image, on_delete=models.DO_NOTHING)
+    class Meta:
+        db_table = 'comment_images'
+
+
 class Group(models.Model):
     """model for group resource"""
     title = models.CharField(max_length=255)
