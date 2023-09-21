@@ -1,7 +1,7 @@
 from django.urls import path,include
 from .views import *
 from rest_framework.routers import DefaultRouter
-from .views import EventViewSet, GoogleLoginView
+from .views import EventViewSet
 
 router = DefaultRouter()
 router.register(r'events', EventViewSet)
@@ -9,7 +9,7 @@ router.register(r'events', EventViewSet)
 
 urlpatterns = [
     # google auth 
-    path('auth/', GoogleLoginView.as_view(), name='google-login'), # full url path: api/accounts/auth
+    # path('auth/', GoogleLoginView.as_view(), name='google-login'), # full url path: api/accounts/auth
     
     path('users/<int:pk>/', userGet, name='user-get'),
     path('users/<int:pk>/update', userUpdate, name='user-update'),

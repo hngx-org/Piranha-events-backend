@@ -7,23 +7,6 @@ import base64
 
 from .models import *
 
-from allauth.socialaccount.providers.base.serializers import SocialLoginSerializer
-from allauth.socialaccount.providers.google.adapter import GoogleOAuth2Adapter
-
-class GoogleLoginSerializer(SocialLoginSerializer):
-    """serializer for Google signup"""
-    adapter_class = GoogleOAuth2Adapter
-    
-    def validate(self, attrs):
-        social_token = self.get_social_token(attrs)
-        user = self.social_login(attrs['access_token'], social_token, is_signup=True)
-
-        if user is None:
-            # The user does not exist, so create a new account.
-            user = self.social_signup(attrs['access_token'], social_token)
-
-        return user
-
 
 class EventSerializer(serializers.ModelSerializer):
     """EventSerializer class converts Event objects to and from JSON."""
