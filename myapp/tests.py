@@ -154,6 +154,50 @@ class EventAPITestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
+class InterestedEventTests(TestCase):
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create(username='testuser', password='testpassword')
+
+        # Create an event
+        self.event = Event.objects.create(title='Test Event')
+
+        # Create an InterestedEvent for testing DELETE
+        self.interested_event = InterestedEvent.objects.create(user=self.user, event=self.event)
+
+        # Create an API client for making requests
+        self.client = APIClient()
+
+    def test_express_interest(self):
+        url = f'/api/users/{self.user.id}/interests/{self.event.id}/'
+
+        # Test expressing interest
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # Test expressing interest again (should return 400 Bad Request)
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_remove_interest(self):
+        url = f'/api/users/{self.user.id}/interests/{self.event.id}/'
+
+        # Test removing interest
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        # Test removing interest again (should return 400 Bad Request)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_remove_nonexistent_interest(self):
+        url = f'/api/users/{self.user.id}/interests/{self.event.id + 1}/'
+
+        # Test removing non-existent interest (should return 400 Bad Request)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
 class CommentViewTestCases(TestCase):
     def setUp(self) -> None:
         """
