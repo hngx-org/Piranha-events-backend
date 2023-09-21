@@ -26,7 +26,6 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=250, unique=True)
     email = models.EmailField(unique=True)
     avatar = models.CharField(max_length=255, blank=True, null=True)
@@ -49,8 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 # Images Model
 class Image(models.Model):
-    id = models.AutoField(primary_key=True)
-    url = models.ImageField()
+    url = models.ImageField()#this should be a url field or something
 
     def __str__(self):
         return str(self.id)
@@ -87,7 +85,6 @@ class Event(models.Model):
 #         db_table = 'event_thumbnail'
 
 class Comment(models.Model):
-    id = models.AutoField(primary_key=True)
     body = models.TextField(max_length=1024)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     event = models.ForeignKey("Event", on_delete=models.DO_NOTHING)
@@ -126,7 +123,7 @@ class UserGroup(models.Model):
         return self.group_id
     
     class Meta:
-        db_table = 'user_groups'
+        db_table = 'user_group'
 
 
 
