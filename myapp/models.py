@@ -1,10 +1,11 @@
+import uuid
 from tabnanny import verbose
 from django.db import models
+# from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-import uuid
 # Create your models here.
 
-
+# User = get_user_model()
 
 class User(AbstractBaseUser, PermissionsMixin):
     user_id = models.AutoField(primary_key=True)
@@ -30,6 +31,7 @@ class InterestedEvent(models.Model):
         # Doubt this will work. Test to see.
         return self.event.title # changed 'name' to 'title'
 
+
 # Images Model
 class Image(models.Model):
     image_id = models.AutoField(primary_key=True)
@@ -39,6 +41,7 @@ class Image(models.Model):
     def __str__(self):
         return str(self.image_id) # Added string (str)
 
+
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
     body = models.TextField(max_length=1024)
@@ -46,7 +49,26 @@ class Comment(models.Model):
     event = models.ForeignKey("Event", on_delete=models.DO_NOTHING)
     def __str__(self):
         return self.user.username # added user
+    
+    
+class CommentReply(models.Model):
+    """allow for users to reply on a comment"""
+    reply_id = models.AutoField(primary_key=True)
+    body = models.TextField(max_length=1024)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    comment = models.ForeignKey("Comment", on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Reply by {self.user.username}"
+    
+    
+class CommentLike(models.Model):
+    """class model for comment likes"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.username} liked a comment"
 
 
 class Group(models.Model):

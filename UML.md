@@ -1,6 +1,6 @@
 # Class UML Diagram For Event App Base On [User_Event_App_Workflow.txt](User_Event_App_Workflow.txt)
  
-   ![Class UML Diagram](IMGs/image.png)
+   ![Class UML Diagram](IMGs/image1.png.1)
 
   ## Notes
   

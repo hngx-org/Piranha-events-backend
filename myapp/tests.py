@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Event, Comment, Image, User, Group, User_group
+from .models import Event, Comment, Image, User, Group, User_group, CommentReply, CommentLike
 import datetime
 
 
@@ -221,6 +221,67 @@ class CommentViewTestCases(TestCase):
         # assert that the object was deleted and only one object remains
         res = self.client.get(reverse("comment-list"))
         assert len(res.data) == 1
+        
+
+class CommentReplyLikeTestCase(TestCase):
+    """Test cases for Comment like and replies"""
+    base_url = "http://localhost:8000/api/comments"
+    
+    def setUp(self):
+        # Create a test user
+        self.user = User.objects.create(username='testuser', password='testpassword')
+
+        # Create a test comment
+        self.comment = Comment.objects.create(user=self.user, body='Test Comment')
+
+        # Create a test client for API requests
+        self.client = APIClient()
+
+    def test_create_comment_reply(self):
+        # Ensure you can create a comment reply
+        reply_data = {'user': self.user.id, 'body': 'Test Reply'}
+        response = self.client.post(f'{self.base_url}/{self.comment.id}/reply/', reply_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(CommentReply.objects.count(), 1)
+
+    def test_create_comment_like(self):
+        # Ensure you can create a comment like
+        response = self.client.post(f'{self.base_url}/{self.comment.id}/like', {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(CommentLike.objects.count(), 1)
+
+    def test_create_duplicate_comment_like(self):
+        # Ensure you can't create a duplicate comment like for the same user and comment
+        self.client.post(f'{self.base_url}/{self.comment.id}/like', {}, format='json')
+        response = self.client.post(f'/api/create_or_delete_comment_like/{self.comment.id}/', {}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(CommentLike.objects.count(), 1)
+
+    def test_delete_comment_like(self):
+        # Ensure you can delete a comment like
+        self.client.post(f'{self.base_url}/{self.comment.id}/like', {}, format='json')
+        response = self.client.delete(f'{self.base_url}/{self.comment.id}/like', format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(CommentLike.objects.count(), 0)
+
+    def test_create_comment_reply_missing_body(self):
+        # Ensure you can't create a comment reply without a body
+        reply_data = {'user': self.user.id}
+        response = self.client.post(f'{self.base_url}/{self.comment.id}/reply', reply_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(CommentReply.objects.count(), 0)
+
+    def test_create_comment_reply_invalid_comment(self):
+        # Ensure you can't create a comment reply for an invalid comment ID
+        reply_data = {'user': self.user.id, 'body': 'Test Reply'}
+        response = self.client.post('{self.base_url}/9999/reply', reply_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(CommentReply.objects.count(), 0)
+
+    def test_delete_comment_like_not_found(self):
+        # Ensure you can't delete a non-existent comment like
+        response = self.client.delete(f'{self.base_url}/{self.comment.id}/like', format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class GroupViewTestCases(TestCase):

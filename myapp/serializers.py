@@ -1,11 +1,9 @@
-from rest_framework import serializers
 
 import base64
-
-
-from .models import Event, Group, User_group, Comment, Image, InterestedEvent
-
-
+from rest_framework import serializers
+from .models import (Event, Group, User_group,
+                     Comment, Image, InterestedEvent,
+                     CommentReply, CommentLike)
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -48,6 +46,22 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class CommentReplySerializer(serializers.ModelSerializer):
+    """CommentReply serializer that converts replies to and from json"""
+    
+    class Meta:
+        model = CommentReply
+        fields = "__all__" 
+        
+        
+class CommentLikeSerializer(serializers.ModelSerializer):
+    """CommentLike serializer converts likes to and from json"""
+    
+    class Meta:
+        model = CommentLike
+        fields = "__all__"
+
+
 class ImageSerializer(serializers.ModelSerializer):
     """This serializer transforms Image objects to json and back to binary"""
 
@@ -61,4 +75,3 @@ class ImageSerializer(serializers.ModelSerializer):
         with obj.image_field.open() as img_file:
             img_data = base64.b64encode(img_file.read()).decode("utf-8")
         return img_data
-
