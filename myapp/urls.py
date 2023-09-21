@@ -32,6 +32,5 @@ urlpatterns = [
     path('groups/<int:groupId>/', get_specific_group, name='group-detail'),
     path('groups/<int:groupId>/update/', update_group, name='group-update'),
     path('groups/<int:groupId>/delete/', delete_group, name='group-delete'),
-
 ]
 
