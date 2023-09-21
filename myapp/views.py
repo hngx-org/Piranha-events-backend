@@ -16,6 +16,20 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
+    # to modify the DELETE request to return a response when deleting a specific event by ID
+    @action(detail=True, methods=['DELETE'])
+    def delete_event(self, request, pk=None):
+        """Deletes an event by ID"""
+
+        try:
+            event = self.get_object()
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        event.delete()  # Delete the event
+        return Response({'message': 'Event deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+    
 
 class GoogleLoginView(SocialLoginView):
     """view for Google signup"""
@@ -58,11 +72,13 @@ def remove_interest(request, userId, eventId):
     return Response({"detail": "Interest in the event has been removed."}, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['POST'])
-def add_comment(request, eventId):
-    """allows user to add a comment to an event"""
+def add_comment(request):
+    """Allows a user to add a comment to an event"""
+
+    event_id = request.data.get('eventId')  # Get event ID from request data
 
     try:
-        event = Event.objects.get(pk=eventId)
+        event = Event.objects.get(pk=event_id)
     except Event.DoesNotExist:
         return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
