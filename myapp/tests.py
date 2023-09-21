@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Event, Comment, Image, User, Group, User_group
+from .models import Event, Comment, Image, User, Group, User_group, InterestedEvent
 import datetime
 
 
