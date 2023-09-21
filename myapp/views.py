@@ -10,7 +10,7 @@ from .models import User, Event, Comment, InterestedEvent,User_group
 
 
 from .serializers import CommentSerializer, ImageSerializer
-from .serializers import GroupSerializer, User_groupSerializer
+from .serializers import GroupSerializer, User_groupSerializer, InterestedEventSerializer
 
 from .models import Image
 
