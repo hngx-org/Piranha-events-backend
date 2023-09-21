@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Event, Comment, Image, User, Group, User_group
+from .models import Event, Comment, Image, User, Group, UserGroup
 import datetime
 
 
@@ -233,7 +233,7 @@ class GroupViewTestCases(TestCase):
 
         self.group = Group.objects.create(name="test_group", description="test_description", creator_id=self.user)
 
-        User_group.objects.create(user=self.user, group=self.group)
+        UserGroup.objects.create(user=self.user, group=self.group)
 
     def test_create_group(self):
         """

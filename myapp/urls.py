@@ -11,7 +11,7 @@ urlpatterns = [
     # google auth 
     path('auth/', GoogleLoginView.as_view(), name='google-login'), # full url path: api/accounts/auth
     
-    path('users/<int:pk>', userGet, name='user-get'),
+    path('users/<int:pk>/', userGet, name='user-get'),
     path('users/<int:pk>/update', userUpdate, name='user-update'),
 
     # Event Management
@@ -34,7 +34,7 @@ urlpatterns = [
     # Remove interest in an event
     path('users/<int:userId>/interests/<int:eventId>/', remove_interest, name='remove-interest'),
 
-    path('groups/',create_goup, name='group-create'),
+    path('groups/',create_group, name='group-create'),
     path('groups/<int:pk>/', get_specific_group, name='group-detail'),
     path('groups/<int:pk>/', update_group, name='group-update'),
     path('groups/<int:pk>/', delete_group, name='group-delete'),
