@@ -16,8 +16,10 @@ urlpatterns = [
 
     # Event Management
     path('', include(router.urls)),
-  
-    path('events/<int:eventId>/comments/', add_comment, name='add-comment'),
+    
+    
+    path('api/events/comments/', add_comment, name='add-comment'),
+    # path('events/<int:eventId>/comments/', add_comment, name='add-comment'),
     path('events/<int:eventId>/comments/', get_comments, name='get-comments'),
 
     # image
