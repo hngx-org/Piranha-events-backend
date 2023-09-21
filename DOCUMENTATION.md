@@ -97,6 +97,8 @@ python manage.py runserver
 
 **Method: POST**
 
+**Description: Saves the event to the database.**
+
 **Parameters:**
 
 - title (string): Event title
@@ -108,8 +110,7 @@ python manage.py runserver
 - end_time (string): Event end time (HH:MM:SS)
 - creator_id (integer): Creator's ID
 
-**Description: Saves the event to the database.**
-- Example
+**Example**
   
 ```bash
 
