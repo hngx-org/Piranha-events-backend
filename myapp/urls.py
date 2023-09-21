@@ -41,8 +41,8 @@ urlpatterns = [
     path('groups/<int:groupId>/members/<int:userId>', remove_user_from_group, name='group-user-delete'),
     path('groups/<int:groupId>/members/', group_members_list, name='group-members-list'),
 
-    # "path('comments/<int:commentId>/likes/', add_likes_to_comment, name='add-likes-to-comment'),"
-    # "path('comments/<int:commentId>/likes/', get_likes_for_comment, name='get-likes-for-comment'),"
-    # "path('comments/<int:commentId>/likes/', delete_likes_for_comment, name='delete-likes-for-comment'),"
+    path('comments/<int:commentId>/likes/', add_likes_to_comment, name='add-likes-to-comment'),
+    path('comments/<int:commentId>/likes/', get_likes_for_comment, name='get-likes-for-comment'),
+    path('comments/<int:commentId>/likes/', delete_likes_for_comment, name='delete-likes-for-comment'),
 ]
 

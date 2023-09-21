@@ -5,7 +5,6 @@ from .serializers import *
 from rest_framework import status, permissions, viewsets,generics
 from rest_framework.decorators import api_view, permission_classes
 from .models import User, Group
-from .serializers import UserSerializer, GroupSerializer
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -254,3 +253,29 @@ def group_members_list(request, groupId):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Group.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    
+
+@api_view(['POST'])
+def add_likes_to_comment(request, commentId):
+    if request.method == 'POST':
+        serializer = LikesSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_likes_for_comment(request, commentId):
+    if request.method == 'GET':
+        likes = Likes.objects.filter(comment_id=commentId)
+        serializer = LikesSerializer(likes, many=True)
+        return Response(serializer.data)
+
+@api_view(['DELETE'])
+def delete_likes_for_comment(request, commentId):
+    if request.method == 'DELETE':
+        likes = Likes.objects.filter(comment_id=commentId)
+        likes.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
