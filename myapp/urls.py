@@ -31,10 +31,10 @@ urlpatterns = [
     path('groups/<int:groupId>/', delete_group, name='group-delete'),
     path('groups/', get_groups, name='group-list'),
 
-    "path('groups/<int:groupId>/members/<int:userId>', add_user_to_group, name='group-user-create'),"
-    "path('groups/<int:groupId>/members/<int:userId>', remove_user_from_group, name='group-user-delete'),"
-    "path('groups/<int:groupId>/members/', group_members_list, name='group-members-list'),"
-    
+    path('groups/<int:groupId>/members/<int:userId>', add_user_to_group, name='group-user-create'),
+    path('groups/<int:groupId>/members/<int:userId>', remove_user_from_group, name='group-user-delete'),
+    path('groups/<int:groupId>/members/', group_members_list, name='group-members-list'),
+
     "path('comments/<int:commentId>/likes/', add_likes_to_comment, name='add-likes-to-comment'),"
     "path('comments/<int:commentId>/likes/', get_likes_for_comment, name='get-likes-for-comment'),"
     "path('comments/<int:commentId>/likes/', delete_likes_for_comment, name='delete-likes-for-comment'),"

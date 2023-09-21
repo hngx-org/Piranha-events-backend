@@ -4,6 +4,9 @@ from .models import *
 from .serializers import *
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes
+from .models import User, Group
+from .serializers import UserSerializer, GroupSerializer
+
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
@@ -206,3 +209,39 @@ def userUpdate(request, pk):
             serializer.save()
             
     return Response(serializer.data)
+
+
+
+@api_view(['POST'])
+def add_user_to_group(request, groupId, userId):
+    try:
+        group = Group.objects.get(id=groupId)
+        user = User.objects.get(id=userId)
+        group.user_set.add(user)
+        return Response(status=status.HTTP_201_CREATED)
+    except Group.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['DELETE'])
+def remove_user_from_group(request, groupId, userId):
+    try:
+        group = Group.objects.get(id=groupId)
+        user = User.objects.get(id=userId)
+        group.user_set.remove(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    except Group.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def group_members_list(request, groupId):
+    try:
+        group = Group.objects.get(id=groupId)
+        members = group.user_set.all()
+        serializer = UserSerializer(members, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Group.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
