@@ -27,7 +27,7 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 ### Installation
 
 ### To set up the Events app API, follow these steps:
-**Clone the repository:**
+#### Clone the repository:
 
     ```bash
 
@@ -35,14 +35,14 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
         cd <repository_directory>
     ```
 
-**Create a virtual environment:**
+#### Create a virtual environment:
 
     ```bash
 
     python3 -m venv venv
     ```
 
-**Activate the virtual environment:**
+#### Activate the virtual environment:
 
     ```sh
         Linux: source venv/bin/activate   
@@ -50,20 +50,20 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
         Windows: source venv\Scripts\activate
     ```
 
-**Install dependencies:**
+#### Install dependencies:
 
     ```bash
 
     pip install -r requirements.txt
     ```
 
-**Run migrations:**
+#### Run migrations:
 
     ```bash
 
     python manage.py migrate
     ```
-**Start the Django server:**
+#### Start the Django server:
 
     ```bash
 
