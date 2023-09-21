@@ -28,6 +28,7 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 
 ### To set up the Events app API, follow these steps:
 **Clone the repository:**
+
     ```bash
 
         git clone <repository_url>
@@ -35,39 +36,44 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
     ```
 
 **Create a virtual environment:**
+
     ```bash
 
     python3 -m venv venv
     ```
 
 **Activate the virtual environment:**
-    ```
-    bash
 
-    source venv/bin/activate   # On Windows: venv\Scripts\activate
+    ```bash
+
+    Linux: source venv/bin/activate   
+    
+    Windows: source venv\Scripts\activate
     ```
 
 **Install dependencies:**
-    ```
-    bash
+
+    ```bash
 
     pip install -r requirements.txt
     ```
 
 **Run migrations:**
-    ```
-    bash
+
+    ```bash
 
     python manage.py migrate
     ```
 **Start the Django server:**
-    ```
-    bash
+
+    ```bash
 
     python manage.py runserver
     ```
 
 ### The API should now be running at http://localhost:8000/.
+
+
 
 
 # Events Endpoints
@@ -104,8 +110,8 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 
 **Description: Saves the event to the database.**
 - Example
-    ```
-    bash
+- 
+    ```bash
 
     curl -X POST https://team-piranha.onrender.com/api/events/ -d "title=Sample Event" -d "description=This is a sample event" -d "location=Sample Location" -d "start_date=2023-09-21" -d "end_date=2023-09-22" -d "start_time=10:00:00" -d "end_time=12:00:00" -d "creator_id=1"
     ```
