@@ -17,7 +17,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-
+    
     def __str__(self):
         return self.username
 
@@ -92,7 +92,7 @@ class User_group(models.Model):
 
 class Event(models.Model):
     """Model representing an event."""
-    id = models.AutoField(primary_key=True)
+    
     title = models.CharField(max_length=60)
     description = models.CharField(max_length=1024)
     creator_id = models.ForeignKey('User', on_delete=models.CASCADE)
@@ -101,7 +101,7 @@ class Event(models.Model):
     end_date = models.DateField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    thumbnail=models.ImageField(blank=True,upload_to='events/')
+    
 
     class Meta:
         verbose_name ='Event'

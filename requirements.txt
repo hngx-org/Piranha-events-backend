@@ -1,4 +1,5 @@
 asgiref==3.7.2
+<<<<<<< HEAD
 Brotli==1.1.0
 certifi==2023.7.22
 charset-normalizer==3.2.0
@@ -7,14 +8,24 @@ djangorestframework==3.14.0
 drf-yasg==1.21.7
 gunicorn==21.2.0
 idna==3.4
+=======
+Django==4.2.5
+djangorestframework==3.14.0
+drf-yasg==1.21.7
+>>>>>>> 34f53473069df589a662cf29d2806914049342ff
 inflection==0.5.1
 packaging==23.1
-Pillow==9.5.0
+Pillow==10.0.1
 pytz==2023.3.post1
 PyYAML==6.0.1
+<<<<<<< HEAD
 requests==2.31.0
 sqlparse==0.4.4
 typing_extensions==4.7.1
+=======
+sqlparse==0.4.4
+typing_extensions==4.8.0
+>>>>>>> 34f53473069df589a662cf29d2806914049342ff
 tzdata==2023.3
 uritemplate==4.1.1
 urllib3==2.0.5
