@@ -28,16 +28,14 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 
 ### To set up the Events app API, follow these steps:
 **Clone the repository:**
-    ```
-    bash
+    ```bash
 
-    git clone <repository_url>
-    cd <repository_directory>
+        git clone <repository_url>
+        cd <repository_directory>
     ```
 
 **Create a virtual environment:**
-    ```
-    bash
+    ```bash
 
     python3 -m venv venv
     ```
