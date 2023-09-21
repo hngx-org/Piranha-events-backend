@@ -33,7 +33,7 @@ class UserGroupSerializer(serializers.ModelSerializer):
     """User_groupSerializer class converts User_group objects to and from JSON."""
 
     class Meta:
-        model =  UserGroup
+        model = UserGroup
         fields = "__all__"
 
 
