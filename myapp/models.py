@@ -129,26 +129,28 @@ class UserGroup(models.Model):
         db_table = 'user_groups'
 
 
-# class GroupEvent(models.Model):
-#     group_id()
-#     event_id()
-    
-#     def __str__(self):
-#         return self.group_id
-    
-#     class Meta:
-#         db_table = 'group_events'
-        
-        
-# class GroupImage(models.Model):
-#     group_id()
-#     image_id()
-    
-#     class Meta:
-#         db_table = 'group_image'
-        
-#     def __str__(self):
-#         return self.group_id
+
+class GroupEvent(models.Model):
+    group_id = models.ForeignKey("Group", on_delete=models.CASCADE)
+    event_id = models.ForeignKey("Event", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.group_id
+
+    class Meta:
+        db_table = 'group_events'
+
+
+class GroupImage(models.Model):
+    group_id = models.ForeignKey("Group", on_delete=models.CASCADE)
+    image_id = models.ForeignKey("Image", on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'group_image'
+
+    def __str__(self):
+        return self.group_id
+
     
 # Interested Events Model
 class InterestedEvent(models.Model):
@@ -159,14 +161,14 @@ class InterestedEvent(models.Model):
         return self.event_id
     class Meta:
         db_table = 'interested_events'
-        
-        
-# class Likes(models.Model):
-#     user_id()
-#     comment_id()
-    
-#     def __str__(self):
-#         return self.comment_id
-#     class Meta:
-#         db_table = 'likes'
 
+
+class Likes(models.Model):
+    user_id = models.ForeignKey("User", on_delete=models.CASCADE)
+    comment_id = models.ForeignKey("Comment", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.comment_id
+
+    class Meta:
+        db_table = 'likes'
