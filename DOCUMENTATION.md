@@ -35,40 +35,41 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
     cd <repository_directory>
 ```
 
-#### Create a virtual environment:
+**Create a virtual environment:**
 
-    ```bash
+```bash
 
-    python3 -m venv venv
-    ```
+python3 -m venv venv
+```
 
-#### Activate the virtual environment:
+**Activate the virtual environment:**
 
-    ```sh
-        Linux: source venv/bin/activate   
-        
-        Windows: source venv\Scripts\activate
-    ```
+```sh
+    Linux: source venv/bin/activate   
+    
+    Windows: source venv\Scripts\activate
+```
 
-#### Install dependencies:
+**Install dependencies:**
 
-    ```bash
+```bash
 
-    pip install -r requirements.txt
-    ```
+pip install -r requirements.txt
+```
 
-#### Run migrations:
+**Run migrations:**
 
-    ```bash
+```bash
 
-    python manage.py migrate
-    ```
-#### Start the Django server:
+python manage.py migrate
+```
 
-    ```bash
+**Start the Django server:**
 
-    python manage.py runserver
-    ```
+```bash
+
+python manage.py runserver
+```
 
 ### The API should now be running at http://localhost:8000/.
 
@@ -84,11 +85,11 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 
 - Description: Returns a list of events.
 - Example
-    ```
-    bash
 
-    curl -X GET https://team-piranha.onrender.com/api/events/
-    ```
+```bash
+
+  curl -X GET https://team-piranha.onrender.com/api/events/
+```
 
 ### Create Event
 
@@ -109,8 +110,8 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 
 **Description: Saves the event to the database.**
 - Example
-- 
-    ```bash
+  
+```bash
 
-    curl -X POST https://team-piranha.onrender.com/api/events/ -d "title=Sample Event" -d "description=This is a sample event" -d "location=Sample Location" -d "start_date=2023-09-21" -d "end_date=2023-09-22" -d "start_time=10:00:00" -d "end_time=12:00:00" -d "creator_id=1"
-    ```
+curl -X POST https://team-piranha.onrender.com/api/events/ -d "title=Sample Event" -d "description=This is a sample event" -d "location=Sample Location" -d "start_date=2023-09-21" -d "end_date=2023-09-22" -d "start_time=10:00:00" -d "end_time=12:00:00" -d "creator_id=1"
+```
