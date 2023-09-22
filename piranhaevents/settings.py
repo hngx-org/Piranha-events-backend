@@ -130,11 +130,11 @@ WSGI_APPLICATION = "piranhaevents.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_db',
-        'USER': 'team',
-        'PASSWORD': 'event_team',
-        'HOST': 'ls-748579094099b0766a964caacd8cc4a4b73ec231.czwhjvdkncwk.us-east-2.rds.amazonaws.com',
-        'PORT': '3306',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER':os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
