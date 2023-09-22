@@ -1,7 +1,9 @@
+
 {
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "python.formatting.provider": "none",
-    "python.pythonPath": ".piranha/bin/python3"
+    // "[python]": {
+    //     "editor.defaultFormatter": "ms-python.black-formatter"
+    // },
+    // "python.formatting.provider": "none",
+    "python.pythonPath": "./.env/bin/python",
+    "python.defaultInterpreterPath": "./env/bin/python",
 }
