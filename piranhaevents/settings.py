@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "myapp.apps.MyappConfig",
     "rest_framework",
     'drf_yasg',
-
+]
 
 
 
