@@ -72,7 +72,17 @@ python manage.py runserver
 ### The API should now be running at http://localhost:8000/.
 
 
+# Login User to the app
 
+### Login User
+
+- Endpoint: https://team-piranha.onrender.com/api/login/
+- Method: POST
+- Description: Logs a user in to the event app.
+
+- Parameters:
+- Email: string
+- pass_id: string
 
 # Events Endpoints
 
