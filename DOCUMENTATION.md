@@ -72,7 +72,17 @@ python manage.py runserver
 ### The API should now be running at http://localhost:8000/.
 
 
+# Login User to the app
 
+### Login User
+
+- Endpoint: https://team-piranha.onrender.com/api/login/
+- Method: POST
+- Description: Logs a user in to the event app.
+
+- Parameters:
+- Email: string
+- pass_id: string
 
 # Events Endpoints
 
@@ -373,3 +383,61 @@ curl -X GET https://team-piranha.onrender.com/api/groups/1/members/list/
 ```
 
 *Each endpoint requires the group ID and, for adding/removing a user, the user ID. The group and user IDs should be replaced with the actual IDs in the URL.*
+
+
+# Login Endpoint
+
+*This documentation provides details about the "Login" endpoint in our project. The login endpoint allows users to authenticate and obtain a token for access.*
+
+- **Endpoint:** `https://team-piranha.onrender.com/api/login`
+
+- **Method:** POST
+
+- **Description:** *Authenticates a user and provides an access token for authorization.*
+
+- **Parameters:** *To authenticate and obtain a token, you need to provide the following parameters:*
+
+- `email` (string): The user's email address.
+- `pass_id` (string): The user's password or identifier for authentication.
+
+**Example**
+
+*To authenticate and obtain a token, you can make a POST request as follows:*
+
+```bash
+Copy code
+curl -X POST https://team-piranha.onrender.com/api/login/ \
+
+  -d "email=user@example.com" \
+  -d "pass_id=yourpassword123"
+```
+
+### Response:
+
+*** Upon a successful login, the API will respond with a JSON object containing the access token and user information. The response may look something like this:***
+
+**JSON**
+
+```bash
+{
+  "status": "success",
+  "message": "Login successful",
+  "data": {
+    "token": "your-access-token",
+    "id": 1,
+    "name": "John Doe",
+    "email": "user@example.com",
+    "avatar": "https://team-piranha.onrender.com/api/media/profile.jpg"
+  }
+}
+```
+
+**The response includes the following information:**
+
+- `token`: The access token for authorization.
+- `id`: The user's unique identifier.
+- `name`: The user's name.
+- `email`: The user's email address.
+- `avatar`: The URL to the user's avatar image, if available.
+
+*This token can be used for subsequent requests to access protected endpoints that require authentication.*
