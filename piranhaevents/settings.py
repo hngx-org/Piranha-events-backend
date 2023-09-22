@@ -47,8 +47,6 @@ INSTALLED_APPS = [
     "rest_framework",
     'drf_yasg',
 
-    
-]
 
 
 
@@ -68,9 +66,11 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework.authentication.TokenAuthentication',
         # 'rest_framework.authentication.SessionAuthentication',
+
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.AllowAny',
@@ -124,6 +124,7 @@ DATABASES = {
 #     }
 # }
 # """
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
+
 from rest_framework import status, permissions, viewsets,generics
 from rest_framework.decorators import api_view, permission_classes
 from .models import User, Group
@@ -15,6 +16,7 @@ from django.db.models.functions import Coalesce
 
 
 
+
 # from allauth.socialaccount.providers.base.views import SocialLoginView
 # from allauth.socialaccount.providers.google.adapter import GoogleOAuth2Adapter
 # from .serializers import GoogleLoginSerializer
@@ -24,6 +26,7 @@ class SingleGroupView(generics.ListAPIView):
     
     def get(self, request:HttpRequest, id:int):
         try:
+
             group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
             serializers = SinglePeopleGroupSerializer(instance=group)
             payload = success_response(
@@ -45,6 +48,7 @@ class AddUserGroupView(generics.CreateAPIView):
     
     def post(self, request:HttpRequest):
         serializer = AddUserToGroupSerializer(data=request.data)
+
         if serializer.is_valid():
             user_id = serializer.validated_data["user_id"]
             group_id = serializer.validated_data["group_id"]
@@ -365,6 +369,7 @@ class CreateEventCommentView(generics.CreateAPIView):
         serializer = CreateCommentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
             payload = success_response(
                     status="success",
                     message=f"Comment added successfully!",
@@ -386,6 +391,7 @@ class LikeView(generics.CreateAPIView):
     queryset = Likes.objects.all()
     def post(self, request:HttpRequest):
         serializer = LikeSerializers(data=request.data)
+
         if serializer.is_valid():
             serializer.save()
             payload = success_response(

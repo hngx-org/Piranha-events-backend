@@ -1,7 +1,7 @@
 from django.urls import path,include
 from .views import *
 from rest_framework.routers import DefaultRouter
-# from .views import EventViewSet
+
 
 # router = DefaultRouter()
 # router.register(r'events', EventViewSet)
@@ -9,6 +9,7 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     # google auth 
+
     
     path('group/', CreateGroupView.as_view(), name='create-group'),
     path('group/add_user/', AddUserGroupView.as_view(), name='adduser-group'),
@@ -36,23 +37,9 @@ urlpatterns = [
     path('interested_event/accept/<int:id>/', AcceptInterestEventView.as_view(), name='i_event-accept-interests'),
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     # path('users/<int:pk>', userGet, name='user-get'),
     # path('users/<int:pk>/update', userUpdate, name='user-update'),
+
 
     # # Event Management
     # path('', include(router.urls)),
@@ -79,6 +66,7 @@ urlpatterns = [
     # path('groups/<int:pk>/', update_group, name='group-update'),
     # path('groups/<int:pk>/', delete_group, name='group-delete'),
     # path('groups/', get_groups, name='group-list'),
+
 
     
     # path('groups/<int:groupId>/members/<int:userId>', add_user_to_group, name='group-user-create'),
