@@ -96,7 +96,7 @@ class LoginView(APIView):
                         'avatar': user.avatar.url if user.avatar else None
                     }
                 )
-                return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data=payload, status=status.HTTP_201_CREATED)
             except User.DoesNotExist:
                 user = User.objects.create_user(email=email, password=pass_id)
                 token, created = Token.objects.get_or_create(user=user)
@@ -136,7 +136,7 @@ class SingleGroupView(generics.ListAPIView):
             return Response(data=payload, status=status.HTTP_201_CREATED)
         except PeopleGroup.DoesNotExist:
             payload = error_response(
-                status="failed", 
+                status="Failed, something went wrong", 
                 message=f"Group does not exist"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
@@ -157,7 +157,7 @@ class AddUserGroupView(generics.CreateAPIView):
             except PeopleGroup.DoesNotExist as e:
                 # print(e)
                 payload = error_response(
-                    status="success",
+                    status="Failed, something went wrong",
                     message=f"{e}",
                 )
                 return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
@@ -168,7 +168,7 @@ class AddUserGroupView(generics.CreateAPIView):
             except User.DoesNotExist as e:
                 # print(e)
                 payload = error_response(
-                    status="success",
+                    status="Failed, something went wrong",
                     message=f"{e}",
                 )
                 return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
