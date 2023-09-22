@@ -5,7 +5,11 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from .models import (
 	User,
-	Event
+	Event,
+ PeopleGroup,
+ Comment,
+ CommentImages, 
+ InterestedEvent
 )
 
 
@@ -19,9 +23,9 @@ class CustomUserAdmin(UserAdmin):
 	list_filter = ('is_active', 'is_staff', 'is_superuser')
 
 	fieldsets = (
-		(None, {'fields' : ('name', 'email', 'password')}),
-		('Permissions', {'fields' : ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
-		('Dates', {'fields' : ('last_login', 'date_joined')})
+		(None, {'fields' : ('name', 'email', 'password', 'avatar')}),
+		('Permissions', {'fields' : ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')})
+		# ('Dates', {'fields' : ('last_login', 'date_joined')})
 	)
 	add_fieldsets = (
 		(None,{
@@ -35,6 +39,15 @@ class CustomUserAdmin(UserAdmin):
 
 	ordering = ('email',)
 
+class CommentImageInline(admin.TabularInline):
+    model = CommentImages
+    
+class CommentAdmin(admin.ModelAdmin):
+    inlines = [CommentImageInline]
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Event)
+admin.site.register(PeopleGroup)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentImages)
+admin.site.register(InterestedEvent)
