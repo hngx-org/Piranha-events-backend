@@ -1,11 +1,13 @@
+import datetime
 import unittest
 import requests
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
 from rest_framework import status
-from .models import Event, Comment, Image, User, Group, UserGroup
-import datetime
+from rest_framework.test import APIClient
+from .models import Event, Comment, User, Likes #Group, UserGroup
+
+from django.contrib.auth.models import User
 
 
 class UserManagementAPITest(unittest.TestCase):
@@ -292,3 +294,104 @@ class GroupViewTestCases(TestCase):
         assert res.status_code == 200
         assert res.data["name"] == updated_group.name
         assert res.data["description"] == updated_group.description
+        
+
+"""
+Testcase for LikeView
+"""
+class LikeViewTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.event = Event.objects.create(
+            title="Test Event",
+            description="This is a test event",
+            location="Test Location",
+            start_time="2023-09-25T12:00:00Z",
+            end_time="2023-09-25T14:00:00Z",
+            group=None,  # You can set this to a group if needed
+            owner=self.user,
+            thumbnail=None,  # You can add a thumbnail if needed
+        )
+
+    def test_create_like(self):
+        # test user create like endpoint /api/like/
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(
+            "/api/like/",
+            {
+                "user_id": self.user.id,
+                "event_id": self.event.id,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Likes.objects.count(), 1)
+
+    def test_create_like_unauthenticated(self):
+        """validates likes by an unauthenticated user"""
+        response = self.client.post(
+            "/api/like/",
+            {
+                "user_id": self.user.id,
+                "event_id": self.event.id,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.data['message'], "You must be signed in to like")
+
+    def test_create_like_duplicate(self):
+        """validates duplicated likes"""
+        self.client.force_authenticate(user=self.user)
+        Likes.objects.create(user=self.user, event=self.event)  # Create a like
+        response = self.client.post(
+            "/api/like/",
+            {
+                "user_id": self.user.id,
+                "event_id": self.event.id,
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['message'], "Cannot double like")
+
+
+"""
+Testcase for DeleteLikeView
+"""
+class DeleteLikeViewTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(username="testuser", password="testpassword")
+        self.event = Event.objects.create(
+            title="Test Event",
+            description="This is a test event",
+            location="Test Location",
+            start_time="2023-09-25T12:00:00Z",
+            end_time="2023-09-25T14:00:00Z",
+            group=None,  # You can set this to a group if needed
+            owner=self.user,
+            thumbnail=None,  # You can add a thumbnail if needed
+        )
+        self.like = Likes.objects.create(user=self.user, event=self.event)
+
+    def test_delete_like(self):
+        """validate delete or undo of a like endpoint /api/like/id/"""
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete(f"/api/like/{self.like.id}/")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Likes.objects.count(), 0)
+
+    def test_delete_like_unauthenticated(self):
+        """check for is a like is created by a user not authenticated"""
+        response = self.client.delete(f"/api/like/{self.like.id}/")
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(Likes.objects.count(), 1)
+
+    def test_delete_like_nonexistent(self):
+        """validates deletetion on like_id which dosent exist"""
+        self.client.force_authenticate(user=self.user)
+        response = self.client.delete("/api/like/999/")  # Non-existent like ID
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['message'], "Like does not exist")
