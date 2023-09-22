@@ -46,10 +46,10 @@ INSTALLED_APPS = [
     "myapp.apps.MyappConfig",
     "rest_framework",
     'drf_yasg',
+
     
     'rest_framework.authtoken', # Adding token based authentication from drf
     'social_django',
-
 
 ]
 
