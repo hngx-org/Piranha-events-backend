@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path,include, re_path
 from .views import *
 from rest_framework.routers import DefaultRouter
 
@@ -9,6 +9,10 @@ from rest_framework.routers import DefaultRouter
 
 urlpatterns = [
     # google auth 
+    # re_path('register-by-access-token/' + r'social/(?P<backend>[^/]+)/$', register_by_access_token),
+    path('authentication-test/', authentication_test),
+    path('social-auth/google-oauth2/', register_by_access_token),
+    # path('', include('social_django.urls', namespace='social')),
 
     
     path('group/', CreateGroupView.as_view(), name='create-group'),

@@ -13,6 +13,12 @@ from rest_api_payload import error_response, success_response
 from django.db.models import Count
 from django.db.models import OuterRef, Subquery, F
 from django.db.models.functions import Coalesce
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
+from social_django.utils import psa
 
 
 
@@ -20,6 +26,48 @@ from django.db.models.functions import Coalesce
 # from allauth.socialaccount.providers.base.views import SocialLoginView
 # from allauth.socialaccount.providers.google.adapter import GoogleOAuth2Adapter
 # from .serializers import GoogleLoginSerializer
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@psa()
+def register_by_access_token(request, backend):
+    token = request.data.get('access_token')
+    user = request.backend.do_auth(token)
+    print(request)
+    if user:
+        token, _ = Token.objects.get_or_create(user=user)
+        return Response(
+            {
+                'token': token.key
+            },
+            status=status.HTTP_200_OK,
+            )
+    else:
+        return Response(
+            {
+                'errors': {
+                    'token': 'Invalid token'
+                    }
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+@api_view(['GET', 'POST'])
+def authentication_test(request):
+    print(request.user)
+    return Response(
+        {
+            'message': "User successfully authenticated",
+            'id': request.user.id,
+            'name': request.user.name,
+            'email': request.user.email,
+            'avatar': request.user.avatar.url,
+            
+        },
+        status=status.HTTP_200_OK,
+    )
+    
 class SingleGroupView(generics.ListAPIView):
     serializer_class = SinglePeopleGroupSerializer
     queryset = PeopleGroup.objects.all()
@@ -88,10 +136,10 @@ class AddUserGroupView(generics.CreateAPIView):
                 
                 
         else:
-            print(serializer.errors)
+            # print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed, something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -130,8 +178,8 @@ class RemoveUserGroupView(generics.CreateAPIView):
         else:
             print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed, something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -168,8 +216,8 @@ class CreateGroupView(generics.CreateAPIView):
         else:
             print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed, something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -352,8 +400,8 @@ class CreateEventView(generics.CreateAPIView):
         else:
             print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed, something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -379,8 +427,8 @@ class CreateEventCommentView(generics.CreateAPIView):
         else:
             print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
@@ -401,10 +449,10 @@ class LikeView(generics.CreateAPIView):
                 )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
+            # print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed, something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -445,8 +493,8 @@ class InterestEventView(generics.CreateAPIView):
         else:
             print(serializer.errors)
             payload = error_response(
-                status="failed", 
-                message=f"Something went wrong"
+                status="Failed, something went wrong", 
+                message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -522,27 +570,7 @@ class AcceptInterestEventView(generics.CreateAPIView):
             
         except InterestedEvent.DoesNotExist as e:
             payload = error_response(
-                status="failed", 
+                status="Failed", 
                 message=f"{e}"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-        # if serializer.is_valid():
-        #     user_id = serializer.validated_data["user_id"]
-        #     event_id = serializer.validated_data["event_id"]
-            
-        #     event = Event.objects.get(id=event_id)
-        #     user = User.objects.get(id=event_id)
-            
-        #     payload = success_response(
-        #             status="success",
-        #             message=f"Interest has been shown in event",
-        #             data=serializer.data
-        #         )
-        #     return Response(data=payload, status=status.HTTP_201_CREATED)
-        # else:
-        #     print(serializer.errors)
-        #     payload = error_response(
-        #         status="failed", 
-        #         message=f"Something went wrong"
-        #     )
-        #     return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
