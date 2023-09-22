@@ -93,13 +93,13 @@ class LoginView(APIView):
                         'id': user.id,
                         'name': user.name,
                         'email': user.email,
-                        'avatar': user.avatar.url
+                        'avatar': user.avatar.url if user.avatar else None
                     }
                 )
                 return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
             except User.DoesNotExist:
                 user = User.objects.create_user(email=email, password=pass_id)
-                token = Token.objects.get_or_create(user=user)
+                token, created = Token.objects.get_or_create(user=user)
                 payload = success_response(
                     status="success", 
                     message="Login successful",
@@ -108,7 +108,7 @@ class LoginView(APIView):
                         'id': user.id,
                         'name': user.name,
                         'email': user.email,
-                        'avatar': user.avatar.url
+                        'avatar': user.avatar.url if user.avatar else None
                     }
                 )
                 return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
