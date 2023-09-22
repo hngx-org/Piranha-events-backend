@@ -19,6 +19,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from social_django.utils import psa
+from rest_framework.views import APIView
+
 
 
 
@@ -27,46 +29,96 @@ from social_django.utils import psa
 # from allauth.socialaccount.providers.google.adapter import GoogleOAuth2Adapter
 # from .serializers import GoogleLoginSerializer
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-@psa()
-def register_by_access_token(request, backend):
-    token = request.data.get('access_token')
-    user = request.backend.do_auth(token)
-    print(request)
-    if user:
-        token, _ = Token.objects.get_or_create(user=user)
-        return Response(
-            {
-                'token': token.key
-            },
-            status=status.HTTP_200_OK,
-            )
-    else:
-        return Response(
-            {
-                'errors': {
-                    'token': 'Invalid token'
-                    }
-            },
-            status=status.HTTP_400_BAD_REQUEST,
-        )
+# @api_view(['POST'])
+# @permission_classes([AllowAny])
+# @psa()
+# def register_by_access_token(request, backend):
+#     token = request.data.get('access_token')
+#     user = request.backend.do_auth(token)
+#     print(request)
+#     if user:
+#         token, _ = Token.objects.get_or_create(user=user)
+#         return Response(
+#             {
+#                 'token': token.key
+#             },
+#             status=status.HTTP_200_OK,
+#             )
+#     else:
+#         return Response(
+#             {
+#                 'errors': {
+#                     'token': 'Invalid token'
+#                     }
+#             },
+#             status=status.HTTP_400_BAD_REQUEST,
+#         )
 
 
-@api_view(['GET', 'POST'])
-def authentication_test(request):
-    print(request.user)
-    return Response(
-        {
-            'message': "User successfully authenticated",
-            'id': request.user.id,
-            'name': request.user.name,
-            'email': request.user.email,
-            'avatar': request.user.avatar.url,
+# @api_view(['GET', 'POST'])
+# def authentication_test(request):
+#     print(request.user)
+#     return Response(
+#         {
+#             'message': "User successfully authenticated",
+#             'id': request.user.id,
+#             'name': request.user.name,
+#             'email': request.user.email,
+#             'avatar': request.user.avatar.url,
             
-        },
-        status=status.HTTP_200_OK,
-    )
+#         },
+#         status=status.HTTP_200_OK,
+#     )
+
+class LoginView(APIView):
+    serializer_class = LoginSerializer
+    queryset = User.objects.all()
+    # authentication_classes = [permissions.AllowAny]
+    
+    def post(self, request:HttpRequest):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data["email"]
+            pass_id = serializer.validated_data["pass_id"]
+            
+            try:
+                user = User.objects.get(email=email)
+                token, created = Token.objects.get_or_create(user=user)
+                print(token)
+                payload = success_response(
+                    status="success", 
+                    message="Login successful",
+                    data={
+                        "token": token.key,
+                        'id': user.id,
+                        'name': user.name,
+                        'email': user.email,
+                        'avatar': user.avatar.url
+                    }
+                )
+                return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+            except User.DoesNotExist:
+                user = User.objects.create_user(email=email, password=pass_id)
+                token = Token.objects.get_or_create(user=user)
+                payload = success_response(
+                    status="success", 
+                    message="Login successful",
+                    data={
+                        "token":token.key,
+                        'id': user.id,
+                        'name': user.name,
+                        'email': user.email,
+                        'avatar': user.avatar.url
+                    }
+                )
+                return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            print(serializer.errors)
+            payload = error_response(
+                status="Failed, something went wrong", 
+                message=serializer.errors
+            )
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
     
 class SingleGroupView(generics.ListAPIView):
     serializer_class = SinglePeopleGroupSerializer

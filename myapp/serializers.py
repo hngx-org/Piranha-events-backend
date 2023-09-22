@@ -239,4 +239,8 @@ class InterestedUserEventSerializers(serializers.ModelSerializer):
         model = InterestedEvent
         fields = '__all__'
         
-    
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.CharField()
+    pass_id = serializers.CharField()
