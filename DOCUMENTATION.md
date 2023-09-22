@@ -30,7 +30,6 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 #### Clone the repository:
 
 ```bash
-
     git clone <repository_url>
     cd <repository_directory>
 ```
@@ -38,7 +37,6 @@ Each endpoint requires the group ID and, for adding/removing a user, the user ID
 **Create a virtual environment:**
 
 ```bash
-
 python3 -m venv venv
 ```
 
@@ -47,27 +45,27 @@ python3 -m venv venv
 ```sh
     Linux: source venv/bin/activate   
     
-    Windows: source venv\Scripts\activate
+    Windows: venv\Scripts\activate
 ```
 
 **Install dependencies:**
 
 ```bash
-
 pip install -r requirements.txt
+             OR
+pip freeze > requirements.txt            
 ```
 
 **Run migrations:**
 
 ```bash
-
+python manage.py makemigrations
 python manage.py migrate
 ```
 
 **Start the Django server:**
 
 ```bash
-
 python manage.py runserver
 ```
 
@@ -116,3 +114,120 @@ python manage.py runserver
 
 curl -X POST https://team-piranha.onrender.com/api/events/ -d "title=Sample Event" -d "description=This is a sample event" -d "location=Sample Location" -d "start_date=2023-09-21" -d "end_date=2023-09-22" -d "start_time=10:00:00" -d "end_time=12:00:00" -d "creator_id=1"
 ```
+
+
+# Groups Endpoints
+
+### Create Group
+
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/`
+
+- **Method:** POST
+
+- **Description:** *Creates a new group and saves it to the database.*
+
+- **Parameters:**
+
+  - `title` (string): The title of the group.
+  - `description` (string): A brief description of the group.
+  - `location` (string): The location or meeting place of the group.
+  - `creator_id` (integer): The ID of the user creating the group.
+
+- **Example:**
+  ```bash
+  curl -X POST `https://team-piranha.onrender.com/api/groups/` \
+    -d "title=Sample Group" \
+    -d "description=This is a sample group" \
+    -d "location=Sample Location" \
+    -d "creator_id=1"
+  ```
+
+### List Groups
+
+- **Endpoints:** `https://team-piranha.onrender.com/api/groups/`
+
+- **Method:** GET
+
+- **Description:** *Returns a list of groups.*
+
+- **Example:**
+```bash
+curl -X GET `https://team-piranha.onrender.com/api/groups/`
+```
+
+### Get Specific Group
+
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/<int:pk>/`
+
+- **Method:** GET
+
+- **Description:** *Retrieves details of a specific group.*
+
+- **Example:**
+```bash
+curl -X GET `https://team-piranha.onrender.com/api/groups/1/`
+```
+
+### Update Group
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/<int:pk>/update/`
+
+- **Method:** PUT
+
+- **Description:** *Updates group details.*
+
+- **Example:**
+```bash
+curl -X PUT https://team-piranha.onrender.com/api/groups/1/update/ \
+  -d "title=Updated Group Title" \
+  -d "description=Updated group description"
+```
+
+### Delete Group
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/<int:pk>/delete/`
+
+- **Method:** DELETE
+
+- **Description:** *Deletes a group.*
+
+- **Example:**
+```bash
+curl -X DELETE https://team-piranha.onrender.com/api/groups/1/delete/
+```
+
+### Add User to Group
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/<int:groupId>/members/<int:userId>/`
+
+- **Method:** POST
+
+- **Description:** *Adds a user to a group.*
+
+- **Example:**
+```bash
+curl -X POST https://team-piranha.onrender.com/api/groups/1/members/2/
+```
+
+### Remove User from Group
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/<int:groupId>/members/<int:userId>/remove/`
+
+- **Method:** DELETE
+
+- **Description:** *Removes a user from a group.*
+
+- **Example:**
+```bash
+curl -X DELETE https://team-piranha.onrender.com/api/groups/1/members/2/remove/
+```
+
+### Group Members List
+- **Endpoint:** `https://team-piranha.onrender.com/api/groups/<int:groupId>/members/list/`
+
+- **Method:** GET
+
+- **Description:** *Retrieves a list of members in a group.*
+
+- **Example:**
+```bash
+curl -X GET https://team-piranha.onrender.com/api/groups/1/members/list/
+```
+
+*Each endpoint requires the group ID and, for adding/removing a user, the user ID. The group and user IDs should be replaced with the actual IDs in the URL.*
