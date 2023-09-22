@@ -38,7 +38,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     name = models.CharField(max_length=250, unique=True)
     email = models.EmailField(unique=True)
-    avatar = models.ImageField()
+    avatar = models.ImageField(default='profile.jpg')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
