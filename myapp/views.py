@@ -111,9 +111,8 @@ class LoginView(APIView):
                         'avatar': user.avatar.url if user.avatar else None
                     }
                 )
-                return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+                return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
             payload = error_response(
                 status="Failed, something went wrong", 
                 message=serializer.errors
