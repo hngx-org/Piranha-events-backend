@@ -40,7 +40,7 @@
   - [test_delete_like_unauthenticated](#test_delete_like_unauthenticated-in-deletelikeviewtestcase)
   - [test_delete_like_nonexistent](#test_delete_like_nonexistent-in-deletelikeviewtestcase)
 
-#### *NOTE: Udate the tests you written inline with the reviewed class-based views and make updates tto this document*
+#### *NOTE: Update the tests you have written inline with the reviewed class-based views and make updates to this document*
 
 # UserManagementAPITest
 This test suite is responsible for testing user management-related APIs.
