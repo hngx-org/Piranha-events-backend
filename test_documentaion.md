@@ -40,19 +40,20 @@
   - [test_delete_like_unauthenticated](#test_delete_like_unauthenticated-in-deletelikeviewtestcase)
   - [test_delete_like_nonexistent](#test_delete_like_nonexistent-in-deletelikeviewtestcase)
 
+#### *NOTE: Udate the tests you written inline with the reviewed class-based views and make updates tto this document*
 
 # UserManagementAPITest
 This test suite is responsible for testing user management-related APIs.
 
 ## test_user_registration
-**Description:** This test case checks the user registration endpoint by sending a POST request to `/api/users/register`.
+**Description:** This test case checks the user registration endpoint by sending a POST request to `/api/login/`.
 
 **Expected Behavior:**
 - Response Status Code: 201 (Created)
 - Response JSON contains a `user_id` and `username`.
 
 ## test_user_login
-**Description:** This test case checks the user login endpoint by sending a POST request to `/api/users/login`.
+**Description:** This test case checks the user login endpoint by sending a POST request to `/api/login/`.
 
 **Expected Behavior:**
 - Response Status Code: 200 (OK)
@@ -76,31 +77,31 @@ This test suite is responsible for testing user management-related APIs.
 This test suite is responsible for testing event-related APIs.
 
 ## test_create_event
-**Description:** This test case checks the creation of an event by sending a POST request to the event creation endpoint.
+**Description:** This test case checks the creation of an event by sending a POST request to the event creation endpoint - `/api/event`.
 
 **Expected Behavior:**
 - Response Status Code: 201 (Created)
 
 ## test_get_event_list
-**Description:** This test case checks the retrieval of a list of events by sending a GET request to the event list endpoint.
+**Description:** This test case checks the retrieval of a list of events by sending a GET request to the event list endpoint - `/api/event`.
 
 **Expected Behavior:**
 - Response Status Code: 200 (OK)
 
 ## test_get_event_details
-**Description:** This test case checks the retrieval of event details by sending a GET request to the event detail endpoint.
+**Description:** This test case checks the retrieval of event details by sending a GET request to the event detail endpoint - ``.
 
 **Expected Behavior:**
 - Response Status Code: 200 (OK)
 
 ## test_update_event_details
-**Description:** This test case checks the update of event details by sending a PUT request to the event detail endpoint.
+**Description:** This test case checks the update of event details by sending a PUT request to the event detail endpoint - ``.
 
 **Expected Behavior:**
 - Response Status Code: 200 (OK)
 
 ## test_delete_event
-**Description:** This test case checks the deletion of an event by sending a DELETE request to the event detail endpoint.
+**Description:** This test case checks the deletion of an event by sending a DELETE request to the event detail endpoint - ``.
 
 **Expected Behavior:**
 - Response Status Code: 204 (No Content)
@@ -193,7 +194,7 @@ This test suite is responsible for testing group-related APIs.
 This test suite is responsible for testing like-related APIs.
 
 ## test_create_like (in LikeViewTestCase)
-**Description:** This test case checks creating a like for an event.
+**Description:** This test case checks creating a like for an event - `/api/like`.
 
 **Expected Behavior:**
 - Response Status Code: 201 (Created)
@@ -213,7 +214,7 @@ This test suite is responsible for testing like-related APIs.
 - Response JSON contains a message indicating that double liking is not allowed.
 
 ## test_delete_like (in DeleteLikeViewTestCase)
-**Description:** This test case checks deleting a like.
+**Description:** This test case checks deleting a like - `/api/like/id`.
 
 **Expected Behavior:**
 - Response Status Code: 204 (No Content)
