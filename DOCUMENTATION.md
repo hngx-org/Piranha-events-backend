@@ -91,7 +91,7 @@ python manage.py runserver
 
 ### Create Event
 
-**Endpoint: https://team-piranha.onrender.com/api/events/**
+**Endpoint: https://team-piranha.onrender.com/api/event/**
 
 **Method: POST**
 
@@ -114,6 +114,148 @@ python manage.py runserver
 
 curl -X POST https://team-piranha.onrender.com/api/events/ -d "title=Sample Event" -d "description=This is a sample event" -d "location=Sample Location" -d "start_date=2023-09-21" -d "end_date=2023-09-22" -d "start_time=10:00:00" -d "end_time=12:00:00" -d "creator_id=1"
 ```
+
+### Get user event
+
+**Endpoint: https://team-piranha.onrender.com/api/event/user/{id}**
+
+**Method: GET**
+
+**Description: Get an event posted by a user**
+
+**Parameters:**
+
+- None
+
+**Example**
+  
+```bash
+
+curl -X 'GET' \'https://team-piranha.onrender.com/api/event/user/1/' 
+```
+
+### Get a particular event
+
+**Endpoint: https://team-piranha.onrender.com/api/event/{id}**
+
+**Method: GET**
+
+**Description: Get a saved event by ID**
+
+**Parameters:**
+
+- None
+
+**Example**
+  
+```bash
+
+curl -X 'GET' \'https://team-piranha.onrender.com/api/event/1/' 
+```
+
+
+## INTERESTED EVENTS
+### Add interested event
+
+**Endpoint: https://team-piranha.onrender.com/api/interested_event/**
+
+**Method: POST**
+
+**Description: Saves an interested event to the database.**
+
+**Parameters:**
+
+- user_id: interger
+- event_id: interger
+
+**Example**
+  
+```bash
+
+curl -X 'POST' \'https://team-piranha.onrender.com/api/interested_event/'
+```
+
+### Saves a user interested event
+
+**Endpoint: https://team-piranha.onrender.com/api/interested_event/accept/{id}**
+
+**Method: POST**
+
+**Description: Saves an event the user has accepted**
+
+**Parameters:**
+
+- user_id: interger
+- event_id: interger
+- id: A unique integer value identifying this interested event.
+
+
+**Example**
+  
+```bash
+
+curl -X 'POST' \'https://team-piranha.onrender.com/api/interested_event/accept/2/
+```
+
+
+### Gets interested event
+
+**Endpoint: https://team-piranha.onrender.com/api/interested_event/event/{id}**
+
+**Method: GET**
+
+**Description: Gets an event the user has accepted**
+
+**Parameters:**
+
+- None
+
+**Example**
+  
+```bash
+
+curl -X 'GET' 'https://team-piranha.onrender.com/api/interested_event/event/2/'
+```
+
+
+### Delete interested event
+
+**Endpoint: https://team-piranha.onrender.com/api/interested_event/{id}**
+
+**Method: DELETE**
+
+**Description: Deletes an interested event from the database**
+
+**Parameters:**
+
+- None
+
+**Example**
+  
+```bash
+
+curl -X 'DELETE' 'https://team-piranha.onrender.com/api/interested_event/1/' 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Groups Endpoints
