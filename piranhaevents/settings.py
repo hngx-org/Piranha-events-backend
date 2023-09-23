@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 
+
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -124,6 +131,18 @@ DATABASES = {
 #         'PORT': os.environ.get('DB_PORT'),
 #     }
 # }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'test_db',
+#         'USER': 'team',
+#         'PASSWORD': 'event_team',
+#         'HOST': 'ls-748579094099b0766a964caacd8cc4a4b73ec231.czwhjvdkncwk.us-east-2.rds.amazonaws.com',
+#         'PORT': '3306',
+#     }
+#}
+
 
 
 
