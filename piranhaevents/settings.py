@@ -11,6 +11,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env
+
+
+import pymysql
+
+pymysql.install_as_MySQLdb()
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,7 +58,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     
-    'rest_framework.authtoken', # Adding token based authentication from drf
+    'rest_framework.authtoken', 
     'social_django',
 
 ]
@@ -71,13 +81,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-
+        
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ),
 }
@@ -126,6 +134,18 @@ DATABASES = {
 #         'PORT': os.environ.get('DB_PORT'),
 #     }
 # }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'test_db',
+#         'USER': 'team',
+#         'PASSWORD': 'event_team',
+#         'HOST': 'ls-748579094099b0766a964caacd8cc4a4b73ec231.czwhjvdkncwk.us-east-2.rds.amazonaws.com',
+#         'PORT': '3306',
+#     }
+#}
+
 
 
 
@@ -202,3 +222,6 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
+
+# Token expires in 24 hours
+#TOKEN_EXPIRATION = 60 * 60 * 24

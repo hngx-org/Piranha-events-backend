@@ -12,8 +12,8 @@ class TimestampedModel(models.Model):
     class Meta:
         abstract = True
         ordering = ['-created_at', '-updated_at']
-        
-        
+
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
@@ -47,10 +47,10 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
 
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['name']
-    
+
     def __str__(self):
         return self.name
-    
+
     class Meta:
         db_table = 'user'
 

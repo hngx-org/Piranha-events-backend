@@ -101,7 +101,7 @@ class SinglePeopleGroupSerializer(serializers.ModelSerializer):
     events = serializers.SerializerMethodField()
     class Meta:
         model = PeopleGroup
-        fields = ['name', 'image', 'members_count', 'events']
+        fields = '__all__'
         
         
     def get_events(self, obj):
@@ -122,7 +122,7 @@ class UserPeopleGroupSerializer(serializers.ModelSerializer):
     event_counts = serializers.IntegerField()
     class Meta:
         model = PeopleGroup
-        fields = ['name', 'image', 'members_count', 'event_counts']
+        fields ='__all__'                #['name', 'image', 'members_count', 'event_counts']
         
 class AddUserToGroupSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
@@ -244,3 +244,7 @@ class InterestedUserEventSerializers(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()
     pass_id = serializers.CharField()
+    
+class GroupEventsSerializer(serializers.Serializer):
+    group = SinglePeopleGroupSerializer()
+    events = EventsSerializers(many=True)

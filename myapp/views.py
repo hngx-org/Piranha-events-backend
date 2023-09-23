@@ -3,9 +3,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import *
 from .serializers import *
-
-from rest_framework import status, permissions, viewsets,generics
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.generics import ListAPIView
+from rest_framework import status, permissions, viewsets, generics, serializers
+from rest_framework.decorators import api_view, permission_classes
 from .models import User, Group
 from rest_framework import generics
 from django.http import HttpRequest, HttpResponse
@@ -77,19 +77,18 @@ class LoginView(APIView):
     serializer_class = LoginSerializer
     queryset = User.objects.all()
     # authentication_classes = [permissions.AllowAny]
-    
+
     def post(self, request:HttpRequest):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
             pass_id = serializer.validated_data["pass_id"]
-            
+
             try:
                 user = User.objects.get(email=email)
                 token, created = Token.objects.get_or_create(user=user)
-                print(token)
                 payload = success_response(
-                    status="success", 
+                    status="success",
                     message="Login successful",
                     data={
                         "token": token.key,
@@ -104,7 +103,7 @@ class LoginView(APIView):
                 user = User.objects.create_user(email=email, password=pass_id)
                 token, created = Token.objects.get_or_create(user=user)
                 payload = success_response(
-                    status="success", 
+                    status="success",
                     message="Login successful",
                     data={
                         "token":token.key,
@@ -144,6 +143,29 @@ class SingleGroupView(generics.ListAPIView):
                 message=f"Group does not exist"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class GroupEventsView(generics.ListAPIView):
+    serializer_class = GroupEventsSerializer
+
+    def get(self, request:HttpRequest, id:int):
+        try:
+            group = PeopleGroup.objects.get(id=id)
+            events = Event.objects.filter(group=group)
+            serializers = GroupEventsSerializer(instance={'group': group, 'events': events}, many=False)
+            payload = success_response(
+                status="success",
+                message=f"Events for group {group.name} fetched successfully!",
+                data=serializers.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        except PeopleGroup.DoesNotExist:
+            payload = error_response(
+                status="Failed, something went wrong", 
+                message=f"Group does not exist"
+            )
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+
         
 class AddUserGroupView(generics.CreateAPIView):
     serializer_class = AddUserToGroupSerializer
@@ -435,10 +457,9 @@ class CreateEventView(generics.CreateAPIView):
             group = serializer.validated_data["group"]
             owner = serializer.validated_data["owner"]
             thumbnail = serializer.validated_data["thumbnail"]
-            
+
             user = User.objects.get(id=owner)
             people_group = PeopleGroup.objects.get(id=group)
-            
             try:
                 Event.objects.create(title=title, description=description, location=location, start_time=start_time, end_time=end_time, group=people_group, owner=user, thumbnail=thumbnail)
                 payload = success_response(
@@ -459,15 +480,16 @@ class CreateEventView(generics.CreateAPIView):
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-        
+
 class CreateEventCommentView(generics.CreateAPIView):
     serializer_class = CreateCommentSerializer
     queryset = Comment.objects.all()
-    
-    
+
+
+
     def get_serializer_context(self):
         return {'request': self.request}
-    
+
     def post(self, request:HttpRequest):
         serializer = CreateCommentSerializer(data=request.data)
         if serializer.is_valid():
@@ -480,14 +502,30 @@ class CreateEventCommentView(generics.CreateAPIView):
                 )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
             payload = error_response(
-                status="Failed something went wrong", 
+                status="Failed something went wrong",
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
-
+class EventCommentListView(generics.ListAPIView):
+    queryset =  Comment.objects.all()
+    def get(self, request:HttpRequest, event_id):
+        try:
+            comments = Comment.objects.filter(event_id=event_id)
+            serializers = CommentSerializer(comments, many=True)
+            payload = success_response(
+                status="success",
+                message=f"All comments for event {event_id} fetched successfully!",
+                data=serializers.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        except Exception as e:
+            payload = error_response(
+                status="failed", 
+                message=f"Event does not exist"
+            )
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeView(generics.CreateAPIView):
     serializer_class = LikeSerializers
@@ -626,3 +664,45 @@ class AcceptInterestEventView(generics.CreateAPIView):
                 message=f"{e}"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+<<<<<<< HEAD
+=======
+
+class LogoutSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+
+#class LogoutView(generics.CreateAPIView):
+#    serializer_class = LogoutSerializer
+
+#    def create(self, request, *args, **kwargs):
+#        try:
+#            user_id = self.request.data.get('user_id')
+#            user = User.objects.get(id=user_id)
+#            try:
+#                token = Token.objects.get(user=user)
+#                token.delete()
+#                return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
+#            except Token.DoesNotExist:
+#                return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+#        except User.DoesNotExist:
+#            return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
+class LogoutView(generics.CreateAPIView):
+    serializer_class = LogoutSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user_id = serializer.validated_data.get('user_id')
+            try:
+                user = User.objects.get(id=user_id)
+                try:
+                    token = Token.objects.get(user=user)
+                    token.delete()
+                    return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
+                except Token.DoesNotExist:
+                    return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+            except User.DoesNotExist:
+                return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+>>>>>>> 3b283a14462e0b6e63aae4b2752ac3bb43a25d1e
