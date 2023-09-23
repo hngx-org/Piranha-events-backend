@@ -244,3 +244,7 @@ class InterestedUserEventSerializers(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.CharField()
     pass_id = serializers.CharField()
+    
+class GroupEventsSerializer(serializers.Serializer):
+    group = SinglePeopleGroupSerializer()
+    events = EventsSerializers(many=True)

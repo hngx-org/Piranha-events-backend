@@ -74,19 +74,18 @@ class LoginView(APIView):
     serializer_class = LoginSerializer
     queryset = User.objects.all()
     # authentication_classes = [permissions.AllowAny]
-    
+
     def post(self, request:HttpRequest):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
             pass_id = serializer.validated_data["pass_id"]
-            
+
             try:
                 user = User.objects.get(email=email)
                 token, created = Token.objects.get_or_create(user=user)
-                print(token)
                 payload = success_response(
-                    status="success", 
+                    status="success",
                     message="Login successful",
                     data={
                         "token": token.key,
@@ -101,7 +100,7 @@ class LoginView(APIView):
                 user = User.objects.create_user(email=email, password=pass_id)
                 token, created = Token.objects.get_or_create(user=user)
                 payload = success_response(
-                    status="success", 
+                    status="success",
                     message="Login successful",
                     data={
                         "token":token.key,
@@ -140,6 +139,29 @@ class SingleGroupView(generics.ListAPIView):
                 message=f"Group does not exist"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class GroupEventsView(generics.ListAPIView):
+    serializer_class = GroupEventsSerializer
+
+    def get(self, request:HttpRequest, id:int):
+        try:
+            group = PeopleGroup.objects.get(id=id)
+            events = Event.objects.filter(group=group)
+            serializers = GroupEventsSerializer(instance={'group': group, 'events': events}, many=False)
+            payload = success_response(
+                status="success",
+                message=f"Events for group {group.name} fetched successfully!",
+                data=serializers.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        except PeopleGroup.DoesNotExist:
+            payload = error_response(
+                status="Failed, something went wrong", 
+                message=f"Group does not exist"
+            )
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+
         
 class AddUserGroupView(generics.CreateAPIView):
     serializer_class = AddUserToGroupSerializer
@@ -431,10 +453,9 @@ class CreateEventView(generics.CreateAPIView):
             group = serializer.validated_data["group"]
             owner = serializer.validated_data["owner"]
             thumbnail = serializer.validated_data["thumbnail"]
-            
+
             user = User.objects.get(id=owner)
             people_group = PeopleGroup.objects.get(id=group)
-            
             try:
                 Event.objects.create(title=title, description=description, location=location, start_time=start_time, end_time=end_time, group=people_group, owner=user, thumbnail=thumbnail)
                 payload = success_response(
@@ -455,15 +476,16 @@ class CreateEventView(generics.CreateAPIView):
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-        
+
 class CreateEventCommentView(generics.CreateAPIView):
     serializer_class = CreateCommentSerializer
     queryset = Comment.objects.all()
-    
-    
+
+
+
     def get_serializer_context(self):
         return {'request': self.request}
-    
+
     def post(self, request:HttpRequest):
         serializer = CreateCommentSerializer(data=request.data)
         if serializer.is_valid():
@@ -476,14 +498,30 @@ class CreateEventCommentView(generics.CreateAPIView):
                 )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
             payload = error_response(
-                status="Failed something went wrong", 
+                status="Failed something went wrong",
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
-
+class EventCommentListView(generics.ListAPIView):
+    queryset =  Comment.objects.all()
+    def get(self, request:HttpRequest, event_id):
+        try:
+            comments = Comment.objects.filter(event_id=event_id)
+            serializers = CommentSerializer(comments, many=True)
+            payload = success_response(
+                status="success",
+                message=f"All comments for event {event_id} fetched successfully!",
+                data=serializers.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        except Exception as e:
+            payload = error_response(
+                status="failed", 
+                message=f"Event does not exist"
+            )
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeView(generics.CreateAPIView):
     serializer_class = LikeSerializers

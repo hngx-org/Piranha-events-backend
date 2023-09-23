@@ -26,6 +26,8 @@ urlpatterns = [
     path('group/<int:id>/', SingleGroupView.as_view(), name='single-group'),
     path('group/user/<int:id>/', UserGroupView.as_view(), name='user-group'),
     
+    path('group/<int:id>/events/', GroupEventsView.as_view(), name = 'list-group-events'),
+    
     
     path('event/', CreateEventView.as_view(), name='create-event'),
     path('events/', AllEventView.as_view(), name='all-event'),
@@ -35,6 +37,7 @@ urlpatterns = [
     
     
     path('comment/', CreateEventCommentView.as_view(), name='create-comment'),
+    path('comment/list/<int:event_id>/', EventCommentListView.as_view(), name='list-comment'),
     path('like/', LikeView.as_view(), name='like-comment'),
     path('like/<int:id>/', DeleteLikeView.as_view(), name='like-comment'),
     
