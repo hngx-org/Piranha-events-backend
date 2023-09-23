@@ -5,7 +5,7 @@ from .models import *
 from .serializers import *
 
 from rest_framework import status, permissions, viewsets,generics
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from .models import User, Group
 from rest_framework import generics
 from django.http import HttpRequest, HttpResponse
@@ -19,7 +19,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from social_django.utils import psa
-from rest_framework.views import APIView
+
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 
 
 
@@ -118,7 +121,8 @@ class LoginView(APIView):
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class SingleGroupView(generics.ListAPIView):
     serializer_class = SinglePeopleGroupSerializer
     queryset = PeopleGroup.objects.all()
@@ -271,7 +275,8 @@ class CreateGroupView(generics.CreateAPIView):
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class DeleteGroupView(generics.DestroyAPIView):
     serializer_class = PeopleGroupSerializer
     queryset = PeopleGroup.objects.all()
@@ -338,7 +343,6 @@ class UserGroupView(generics.ListAPIView):
             user_groups = self.get_queryset(user)
             print(user_groups)
             if user_groups.exists():
-                serializers = UserPeopleGroupSerializer(user_groups, many=True)
                 payload = success_response(
                     status="success",
                     message=f"All groups for {user.name} fetched successfully!",
@@ -595,7 +599,6 @@ class EventInterestUserView(generics.ListAPIView):
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 
-
 class AcceptInterestEventView(generics.CreateAPIView):
     serializer_class = InterestedUserEventSerializers
     queryset = InterestedEvent.objects.all()
@@ -616,8 +619,6 @@ class AcceptInterestEventView(generics.CreateAPIView):
                     data={}
                 )
             return Response(data=payload, status=status.HTTP_201_CREATED)
-            
-            
             
         except InterestedEvent.DoesNotExist as e:
             payload = error_response(
