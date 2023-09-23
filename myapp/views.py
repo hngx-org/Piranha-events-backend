@@ -629,18 +629,38 @@ class AcceptInterestEventView(generics.CreateAPIView):
 class LogoutSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
+#class LogoutView(generics.CreateAPIView):
+#    serializer_class = LogoutSerializer
+
+#    def create(self, request, *args, **kwargs):
+#        try:
+#            user_id = self.request.data.get('user_id')
+#            user = User.objects.get(id=user_id)
+#            try:
+#                token = Token.objects.get(user=user)
+#                token.delete()
+#                return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
+#            except Token.DoesNotExist:
+#                return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+#        except User.DoesNotExist:
+#            return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+
 class LogoutView(generics.CreateAPIView):
     serializer_class = LogoutSerializer
 
     def create(self, request, *args, **kwargs):
-        try:
-            user_id = self.request.data.get('user_id')
-            user = User.objects.get(id=user_id)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user_id = serializer.validated_data.get('user_id')
             try:
-                token = Token.objects.get(user=user)
-                token.delete()
-                return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
-            except Token.DoesNotExist:
-                return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+                user = User.objects.get(id=user_id)
+                try:
+                    token = Token.objects.get(user=user)
+                    token.delete()
+                    return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
+                except Token.DoesNotExist:
+                    return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+            except User.DoesNotExist:
+                return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
