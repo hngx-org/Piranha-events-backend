@@ -266,6 +266,7 @@ class CreateGroupView(generics.CreateAPIView):
     queryset = PeopleGroup.objects.all()
     
     def post(self, request:HttpRequest):
+        serializer = None
         serializer = CreateGroupSerializer(data=request.data)
         if serializer.is_valid():
             name = serializer.validated_data["name"]
@@ -360,6 +361,7 @@ class UserGroupView(generics.ListAPIView):
     
     def get(self, request:HttpRequest, id:int):
         try:
+            serializer = None
             user = User.objects.get(id=id)
             
             user_groups = self.get_queryset(user)
@@ -664,8 +666,7 @@ class AcceptInterestEventView(generics.CreateAPIView):
                 message=f"{e}"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-<<<<<<< HEAD
-=======
+
 
 class LogoutSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
@@ -705,4 +706,3 @@ class LogoutView(generics.CreateAPIView):
                 return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> 3b283a14462e0b6e63aae4b2752ac3bb43a25d1e
