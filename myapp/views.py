@@ -74,19 +74,18 @@ class LoginView(APIView):
     serializer_class = LoginSerializer
     queryset = User.objects.all()
     # authentication_classes = [permissions.AllowAny]
-    
+
     def post(self, request:HttpRequest):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
             pass_id = serializer.validated_data["pass_id"]
-            
+
             try:
                 user = User.objects.get(email=email)
                 token, created = Token.objects.get_or_create(user=user)
-                print(token)
                 payload = success_response(
-                    status="success", 
+                    status="success",
                     message="Login successful",
                     data={
                         "token": token.key,
@@ -101,7 +100,7 @@ class LoginView(APIView):
                 user = User.objects.create_user(email=email, password=pass_id)
                 token, created = Token.objects.get_or_create(user=user)
                 payload = success_response(
-                    status="success", 
+                    status="success",
                     message="Login successful",
                     data={
                         "token":token.key,
@@ -461,6 +460,7 @@ class CreateEventCommentView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     
     
+
     def get_serializer_context(self):
         return {'request': self.request}
     
@@ -482,7 +482,25 @@ class CreateEventCommentView(generics.CreateAPIView):
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
-
+class EventCommentListView(generics.ListAPIView):
+    queryset =  Comment.objects.all()
+    def get(self, request:HttpRequest, event_id):
+        try:
+            comments = Comment.objects.filter(event_id=event_id)
+            serializers = CommentSerializer(comments, many=True)
+            payload = success_response(
+                status="success",
+                message=f"All comments for event {event_id} fetched successfully!",
+                data=serializers.data
+            )
+            return Response(data=payload, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            payload = error_response(
+                status="failed", 
+                message=f"Event does not exist"
+            )
+            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeView(generics.CreateAPIView):
     serializer_class = LikeSerializers

@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     
-    'rest_framework.authtoken', # Adding token based authentication from drf
+    'rest_framework.authtoken', 
     'social_django',
 
 ]
@@ -71,13 +71,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-
+        
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         # 'rest_framework.permissions.IsAuthenticated',
-        # 'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
         # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ),
 }

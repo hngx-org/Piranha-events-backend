@@ -35,6 +35,7 @@ urlpatterns = [
     
     
     path('comment/', CreateEventCommentView.as_view(), name='create-comment'),
+    path('comment/list/<int:event_id>/', EventCommentListView.as_view(), name='list-comment'),
     path('like/', LikeView.as_view(), name='like-comment'),
     path('like/<int:id>/', DeleteLikeView.as_view(), name='like-comment'),
     
