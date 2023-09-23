@@ -366,7 +366,9 @@ class UserGroupView(generics.ListAPIView):
             
             user_groups = self.get_queryset(user)
             print(user_groups)
+            serializers = UserPeopleGroupSerializer(user_groups, many=True)
             if user_groups.exists():
+                
                 payload = success_response(
                     status="success",
                     message=f"All groups for {user.name} fetched successfully!",
