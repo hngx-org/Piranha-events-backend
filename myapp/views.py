@@ -476,7 +476,6 @@ class CreateEventCommentView(generics.CreateAPIView):
                 )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.errors)
             payload = error_response(
                 status="Failed something went wrong", 
                 message=serializer.errors
