@@ -150,7 +150,7 @@ class GroupEventsView(generics.ListAPIView):
 
     def get(self, request:HttpRequest, id:int):
         try:
-            group = PeopleGroup.objects.get(id=id)
+            group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
             events = Event.objects.filter(group=group)
             serializers = GroupEventsSerializer(instance={'group': group, 'events': events}, many=False)
             payload = success_response(
