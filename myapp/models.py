@@ -167,4 +167,4 @@ class Likes(TimestampedModel):
 
 class PeopleGroup(Group):
     image = models.ImageField(("Group Image"))
-    members = models.ManyToManyField(User)
+    members = models.ManyToManyField("User")

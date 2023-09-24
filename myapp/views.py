@@ -15,7 +15,8 @@ from django.db.models import OuterRef, Subquery, F
 from django.db.models.functions import Coalesce
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from django.http import Http404
+
 from rest_framework.response import Response
 
 from social_django.utils import psa
@@ -150,21 +151,26 @@ class GroupEventsView(generics.ListAPIView):
 
     def get_queryset(self):
         id = self.kwargs['id']
-        group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
+        try:
+            group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
+        except PeopleGroup.DoesNotExist:
+            raise Http404("Group does not exist")
         return Event.objects.filter(group=group)
 
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
-        group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=self.kwargs['id'])
-        response.data = {
-            'group': SinglePeopleGroupSerializer(group).data,
-            'events': response.data
-        }
-        return Response(success_response(
-            status="success",
-            message=f"Events for group {group.name} fetched successfully!",
-            data=response.data
-        ))
+        id = self.kwargs['id']
+        try:
+            group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
+        except PeopleGroup.DoesNotExist:
+            raise Http404("Group does not exist")
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer({'group': group, 'events': page}, many=False)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer({'group': group, 'events': queryset}, many=False)
+        return Response(serializer.data)
+
 
 class AddUserGroupView(generics.CreateAPIView):
     serializer_class = AddUserToGroupSerializer
