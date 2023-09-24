@@ -152,11 +152,11 @@ class GroupEventsView(generics.ListAPIView):
         try:
             group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
             events = Event.objects.filter(group=group)
-            serializers = GroupEventsSerializer(instance={'group': group, 'events': events}, many=False)
+            serializer = self.get_serializer(instance={'group': group, 'events': events})
             payload = success_response(
                 status="success",
                 message=f"Events for group {group.name} fetched successfully!",
-                data=serializers.data
+                data=serializer.data
             )
             return Response(data=payload, status=status.HTTP_200_OK)
         except PeopleGroup.DoesNotExist:
@@ -164,7 +164,8 @@ class GroupEventsView(generics.ListAPIView):
                 status="Failed, something went wrong", 
                 message=f"Group does not exist"
             )
-            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+
 
         
 class AddUserGroupView(generics.CreateAPIView):

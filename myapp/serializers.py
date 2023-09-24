@@ -247,4 +247,11 @@ class LoginSerializer(serializers.Serializer):
     
 class GroupEventsSerializer(serializers.Serializer):
     group = SinglePeopleGroupSerializer()
-    events = EventsSerializers(many=True)
+    events = EventSerializer(many=True)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['group'] = self.fields['group'].to_representation(instance['group'])
+        representation['events'] = self.fields['events'].to_representation(instance['events'])
+        return representation
+
