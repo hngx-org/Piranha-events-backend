@@ -148,6 +148,7 @@ class SingleGroupViewTest(TestCase):
         self.assertEqual(response.data['data']['name'], 'Group without Members')
         self.assertEqual(len(response.data['data']['members']), 0)  # Check the number of members
 
+
 """add user to group
 """
 class AddUserGroupViewTest(TestCase):
@@ -218,6 +219,7 @@ class AddUserGroupViewTest(TestCase):
         # Check the response content for serializer errors
         self.assertIn('user_id', response.data['message'])
         self.assertIn('group_id', response.data['message'])
+
 
 """removes user from a group: /api/group/remove_user/
 """
@@ -375,6 +377,7 @@ class DeleteGroupViewTest(TestCase):
 
         # Check the response content
         self.assertEqual(response.data['status'], 'failed')
+
 
 """view a group a user belongs to
 """
