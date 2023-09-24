@@ -2,8 +2,8 @@
 
 ## Table of Contents
 
-- [UserManagementAPITest](#usermanagementapitest)
-  - [test_user_registration](#test_user_registration)
+- [LoginViewTest](#loginviewtestcase)
+  - [test_login_successful](#test_login_successful)
   - [test_user_login](#test_user_login)
   - [test_get_user_profile](#test_get_user_profile)
   - [test_update_user_profile](#test_update_user_profile)

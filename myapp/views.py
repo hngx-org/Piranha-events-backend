@@ -19,7 +19,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from social_django.utils import psa
-from rest_framework.views import APIView
+
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 
 
 
@@ -117,7 +120,8 @@ class LoginView(APIView):
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 class SingleGroupView(generics.ListAPIView):
     serializer_class = SinglePeopleGroupSerializer
     queryset = PeopleGroup.objects.all()
@@ -146,7 +150,7 @@ class GroupEventsView(generics.ListAPIView):
 
     def get(self, request:HttpRequest, id:int):
         try:
-            group = PeopleGroup.objects.get(id=id)
+            group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
             events = Event.objects.filter(group=group)
             serializers = GroupEventsSerializer(instance={'group': group, 'events': events}, many=False)
             payload = success_response(
@@ -262,6 +266,7 @@ class CreateGroupView(generics.CreateAPIView):
     queryset = PeopleGroup.objects.all()
     
     def post(self, request:HttpRequest):
+        serializer = None
         serializer = CreateGroupSerializer(data=request.data)
         if serializer.is_valid():
             name = serializer.validated_data["name"]
@@ -293,7 +298,8 @@ class CreateGroupView(generics.CreateAPIView):
                 message=serializer.errors
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class DeleteGroupView(generics.DestroyAPIView):
     serializer_class = PeopleGroupSerializer
     queryset = PeopleGroup.objects.all()
@@ -355,12 +361,14 @@ class UserGroupView(generics.ListAPIView):
     
     def get(self, request:HttpRequest, id:int):
         try:
+            serializer = None
             user = User.objects.get(id=id)
             
             user_groups = self.get_queryset(user)
             print(user_groups)
+            serializers = UserPeopleGroupSerializer(user_groups, many=True)
             if user_groups.exists():
-                serializers = UserPeopleGroupSerializer(user_groups, many=True)
+                
                 payload = success_response(
                     status="success",
                     message=f"All groups for {user.name} fetched successfully!",
@@ -633,7 +641,6 @@ class EventInterestUserView(generics.ListAPIView):
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 
-
 class AcceptInterestEventView(generics.CreateAPIView):
     serializer_class = InterestedUserEventSerializers
     queryset = InterestedEvent.objects.all()
@@ -655,14 +662,13 @@ class AcceptInterestEventView(generics.CreateAPIView):
                 )
             return Response(data=payload, status=status.HTTP_201_CREATED)
             
-            
-            
         except InterestedEvent.DoesNotExist as e:
             payload = error_response(
                 status="Failed", 
                 message=f"{e}"
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LogoutSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
