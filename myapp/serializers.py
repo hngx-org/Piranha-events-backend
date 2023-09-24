@@ -122,7 +122,7 @@ class UserPeopleGroupSerializer(serializers.ModelSerializer):
     event_counts = serializers.IntegerField()
     class Meta:
         model = PeopleGroup
-        fields ='__all__'                #['name', 'image', 'members_count', 'event_counts']
+        fields ='__all__' #['name', 'image', 'members_count', 'event_counts']
         
 class AddUserToGroupSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
