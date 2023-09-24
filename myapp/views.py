@@ -148,37 +148,35 @@ class SingleGroupView(generics.ListAPIView):
 class GroupEventsView(generics.ListAPIView):
     serializer_class = GroupEventsSerializer
 
-    def get(self, request:HttpRequest, id:int):
-        try:
-            group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
-            events = Event.objects.filter(group=group)
-            serializer = self.get_serializer(instance={'group': group, 'events': events})
-            payload = success_response(
-                status="success",
-                message=f"Events for group {group.name} fetched successfully!",
-                data=serializer.data
-            )
-            return Response(data=payload, status=status.HTTP_200_OK)
-        except PeopleGroup.DoesNotExist:
-            payload = error_response(
-                status="Failed, something went wrong", 
-                message=f"Group does not exist"
-            )
-            return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
+    def get_queryset(self):
+        id = self.kwargs['id']
+        group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
+        return Event.objects.filter(group=group)
 
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=self.kwargs['id'])
+        response.data = {
+            'group': SinglePeopleGroupSerializer(group).data,
+            'events': response.data
+        }
+        return Response(success_response(
+            status="success",
+            message=f"Events for group {group.name} fetched successfully!",
+            data=response.data
+        ))
 
-        
 class AddUserGroupView(generics.CreateAPIView):
     serializer_class = AddUserToGroupSerializer
     queryset = PeopleGroup.objects.all()
-    
+
     def post(self, request:HttpRequest):
         serializer = AddUserToGroupSerializer(data=request.data)
 
         if serializer.is_valid():
             user_id = serializer.validated_data["user_id"]
             group_id = serializer.validated_data["group_id"]
-            
+
             try:
                 group = PeopleGroup.objects.get(id=group_id)
             except PeopleGroup.DoesNotExist as e:
@@ -439,7 +437,7 @@ class SingleEventView(generics.ListAPIView):
             )
             return Response(data=payload, status=status.HTTP_200_OK)
                 
-        except Event.DoesNotExist or Exception as e :
+        except Group.DoesNotExist or Exception as e :
             payload = error_response(
                 status="failed", 
                 message=f"{e}"
