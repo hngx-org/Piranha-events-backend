@@ -116,7 +116,7 @@ WSGI_APPLICATION = "piranhaevents.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASE_ROUTERS = ['piranhaevents.db_routers.DefaultRouter', 'piranhaevents.db_routers.PrimaryRouter']
+DATABASE_ROUTERS = ['piranhaevents.db_router.DefaultRouter', 'piranhaevents.db_router.PrimaryRouter']
 
 
 
