@@ -15,7 +15,8 @@ from django.db.models import OuterRef, Subquery, F
 from django.db.models.functions import Coalesce
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from django.http import Http404
+
 from rest_framework.response import Response
 
 from social_django.utils import psa
@@ -148,36 +149,40 @@ class SingleGroupView(generics.ListAPIView):
 class GroupEventsView(generics.ListAPIView):
     serializer_class = GroupEventsSerializer
 
-    def get(self, request:HttpRequest, id:int):
+    def get_queryset(self):
+        id = self.kwargs['id']
         try:
             group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
-            events = Event.objects.filter(group=group)
-            serializers = GroupEventsSerializer(instance={'group': group, 'events': events}, many=False)
-            payload = success_response(
-                status="success",
-                message=f"Events for group {group.name} fetched successfully!",
-                data=serializers.data
-            )
-            return Response(data=payload, status=status.HTTP_200_OK)
         except PeopleGroup.DoesNotExist:
-            payload = error_response(
-                status="Failed, something went wrong", 
-                message=f"Group does not exist"
-            )
-            return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
+            raise Http404("Group does not exist")
+        return Event.objects.filter(group=group)
 
-        
+    def list(self, request, *args, **kwargs):
+        id = self.kwargs['id']
+        try:
+            group = PeopleGroup.objects.annotate(members_count=Count("members")).get(id=id)
+        except PeopleGroup.DoesNotExist:
+            raise Http404("Group does not exist")
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer({'group': group, 'events': page}, many=False)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer({'group': group, 'events': queryset}, many=False)
+        return Response(serializer.data)
+
+
 class AddUserGroupView(generics.CreateAPIView):
     serializer_class = AddUserToGroupSerializer
     queryset = PeopleGroup.objects.all()
-    
+
     def post(self, request:HttpRequest):
         serializer = AddUserToGroupSerializer(data=request.data)
 
         if serializer.is_valid():
             user_id = serializer.validated_data["user_id"]
             group_id = serializer.validated_data["group_id"]
-            
+
             try:
                 group = PeopleGroup.objects.get(id=group_id)
             except PeopleGroup.DoesNotExist as e:
@@ -438,7 +443,7 @@ class SingleEventView(generics.ListAPIView):
             )
             return Response(data=payload, status=status.HTTP_200_OK)
                 
-        except Event.DoesNotExist or Exception as e :
+        except Group.DoesNotExist or Exception as e :
             payload = error_response(
                 status="failed", 
                 message=f"{e}"
