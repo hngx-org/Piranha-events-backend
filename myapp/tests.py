@@ -116,7 +116,7 @@ class SingleGroupViewTest(TestCase):
 
     def test_get_group_with_invalid_id(self):
         # Send a GET request with an invalid group ID
-        response = self.client.get(f'{BASE_URL}/api/groups/{342}/')
+        response = self.client.get(f'{BASE_URL}/api/groups/342/')
 
         # Check the response status code
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
