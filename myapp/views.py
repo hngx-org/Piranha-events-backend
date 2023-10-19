@@ -140,8 +140,8 @@ class SingleGroupView(generics.ListAPIView):
             return Response(data=payload, status=status.HTTP_201_CREATED)
         except PeopleGroup.DoesNotExist:
             payload = error_response(
-                status="Failed, something went wrong", 
-                message=f"Group does not exist"
+                status="Failed, something went wrong",
+                message="Group does not exist",
             )
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
@@ -234,27 +234,26 @@ class RemoveUserGroupView(generics.CreateAPIView):
         if serializer.is_valid():
             user_id = serializer.validated_data["user_id"]
             group_id = serializer.validated_data["group_id"]
-            
+
             try:
                 group = PeopleGroup.objects.get(id=group_id)
                 user = User.objects.get(id=user_id)
-                
+
                 group.user_set.remove(user)
                 group.members.remove(user)
-                
+
                 payload = success_response(
                     status="success",
                     message=f"{user.name} has been removed from {group.name}",
                     data=serializer.data
                 )
                 return Response(data=payload, status=status.HTTP_201_CREATED)
-                
-                
-                
+
+
+
             except PeopleGroup.DoesNotExist or User.DoesNotExist:
                 payload = error_response(
-                    status="success",
-                    message=f"Group or User does not exist",
+                    status="success", message="Group or User does not exist"
                 )
                 return Response(data=payload, status=status.HTTP_404_NOT_FOUND)
         else:
@@ -320,10 +319,7 @@ class DeleteGroupView(generics.DestroyAPIView):
             )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         except PeopleGroup.DoesNotExist:
-            payload = error_response(
-                status="failed", 
-                message=f"Group does not exist"
-            )
+            payload = error_response(status="failed", message="Group does not exist")
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 class AllEventView(generics.ListAPIView):
@@ -336,16 +332,13 @@ class AllEventView(generics.ListAPIView):
             serializers = AllEventsSerializers(event, many=True)
             payload = success_response(
                 status="success",
-                message=f"All events fetched successfully!",
-                data=serializers.data
+                message="All events fetched successfully!",
+                data=serializers.data,
             )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         except Exception as e:
             print(e)
-            payload = error_response(
-                status="failed", 
-                message=f"Group does not exist"
-            )
+            payload = error_response(status="failed", message="Group does not exist")
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 class UserGroupView(generics.ListAPIView):
@@ -353,27 +346,29 @@ class UserGroupView(generics.ListAPIView):
     queryset = User.objects.all()
     
     def get_queryset(self, user):
-        user_groups = PeopleGroup.objects.annotate(
+        return PeopleGroup.objects.annotate(
             members_count=Count("members"),
-            event_counts=Coalesce(Subquery(
-                Event.objects.filter(group_id=OuterRef("pk"))
-                .values("group")
-                .annotate(count=Count("*"))
-                .values("count")
-            ), 0)
+            event_counts=Coalesce(
+                Subquery(
+                    Event.objects.filter(group_id=OuterRef("pk"))
+                    .values("group")
+                    .annotate(count=Count("*"))
+                    .values("count")
+                ),
+                0,
+            ),
         ).filter(members=user)
-        return user_groups
     
     def get(self, request:HttpRequest, id:int):
         try:
             serializer = None
             user = User.objects.get(id=id)
-            
+
             user_groups = self.get_queryset(user)
             print(user_groups)
             serializers = UserPeopleGroupSerializer(user_groups, many=True)
             if user_groups.exists():
-                
+
                 payload = success_response(
                     status="success",
                     message=f"All groups for {user.name} fetched successfully!",
@@ -382,10 +377,9 @@ class UserGroupView(generics.ListAPIView):
                 return Response(data=payload, status=status.HTTP_201_CREATED)
             else:
                 payload = success_response(
-                    status="success", 
-                    message=f"User does not belong to any group",
-                    data=serializers.data
-                    
+                    status="success",
+                    message="User does not belong to any group",
+                    data=serializers.data,
                 )
                 return Response(data=payload, status=status.HTTP_200_OK)
         except User.DoesNotExist or Exception as e :
@@ -414,10 +408,9 @@ class UserEventView(generics.ListAPIView):
                 return Response(data=payload, status=status.HTTP_201_CREATED)
             else:
                 payload = success_response(
-                    status="success", 
-                    message=f"User does not belong to any group",
-                    data=serializers.data
-                    
+                    status="success",
+                    message="User does not belong to any group",
+                    data=serializers.data,
                 )
                 return Response(data=payload, status=status.HTTP_200_OK)
         except User.DoesNotExist or Exception as e :
@@ -436,13 +429,10 @@ class SingleEventView(generics.ListAPIView):
             event = Event.objects.get(id=id)
             serializers = EventsSerializers(event)
             payload = success_response(
-                    status="success", 
-                    message=f"Event retrieved",
-                    data=serializers.data
-                    
+                status="success", message="Event retrieved", data=serializers.data
             )
             return Response(data=payload, status=status.HTTP_200_OK)
-                
+
         except Group.DoesNotExist or Exception as e :
             payload = error_response(
                 status="failed", 
@@ -505,10 +495,10 @@ class CreateEventCommentView(generics.CreateAPIView):
             serializer.save()
 
             payload = success_response(
-                    status="success",
-                    message=f"Comment added successfully!",
-                    data=serializer.data
-                )
+                status="success",
+                message="Comment added successfully!",
+                data=serializer.data,
+            )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
             payload = error_response(
@@ -530,10 +520,7 @@ class EventCommentListView(generics.ListAPIView):
             )
             return Response(data=payload, status=status.HTTP_200_OK)
         except Exception as e:
-            payload = error_response(
-                status="failed", 
-                message=f"Event does not exist"
-            )
+            payload = error_response(status="failed", message="Event does not exist")
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
 
 class LikeView(generics.CreateAPIView):
@@ -545,10 +532,10 @@ class LikeView(generics.CreateAPIView):
         if serializer.is_valid():
             serializer.save()
             payload = success_response(
-                    status="success",
-                    message=f"Comment liked successfully!",
-                    data=serializer.data
-                )
+                status="success",
+                message="Comment liked successfully!",
+                data=serializer.data,
+            )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
             # print(serializer.errors)
@@ -566,17 +553,10 @@ class DeleteLikeView(generics.DestroyAPIView):
         try:
             like = Likes.objects.get(id=id)
             like.delete()
-            payload = success_response(
-                status="success",
-                message=f"Like removed",
-                data={}
-            )
+            payload = success_response(status="success", message="Like removed", data={})
             return Response(data=payload, status=status.HTTP_201_CREATED)
         except Likes.DoesNotExist:
-            payload = error_response(
-                status="failed", 
-                message=f"Like does not exist"
-            )
+            payload = error_response(status="failed", message="Like does not exist")
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 class InterestEventView(generics.CreateAPIView):
@@ -587,10 +567,10 @@ class InterestEventView(generics.CreateAPIView):
         if serializer.is_valid():
             serializer.save()
             payload = success_response(
-                    status="success",
-                    message=f"Interest has been shown in event",
-                    data=serializer.data
-                )
+                status="success",
+                message="Interest has been shown in event",
+                data=serializer.data,
+            )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         else:
             print(serializer.errors)
@@ -610,16 +590,11 @@ class InterestDeleteEventView(generics.DestroyAPIView):
             i_event = InterestedEvent.objects.get(id=id)
             i_event.delete()
             payload = success_response(
-                status="success",
-                message=f"Interest in event revoked",
-                data={}
+                status="success", message="Interest in event revoked", data={}
             )
             return Response(data=payload, status=status.HTTP_201_CREATED)
         except Likes.DoesNotExist:
-            payload = error_response(
-                status="failed", 
-                message=f"Interest does not exist"
-            )
+            payload = error_response(status="failed", message="Interest does not exist")
             return Response(data=payload, status=status.HTTP_400_BAD_REQUEST)
         
 class EventInterestUserView(generics.ListAPIView):
@@ -631,13 +606,12 @@ class EventInterestUserView(generics.ListAPIView):
             event = InterestedEvent.objects.filter(event_id=id)
             serializers = InterestedUserEventSerializers(event, many=True)
             payload = success_response(
-                    status="success", 
-                    message=f"Interested users retrieved",
-                    data=serializers.data
-                    
+                status="success",
+                message="Interested users retrieved",
+                data=serializers.data,
             )
             return Response(data=payload, status=status.HTTP_200_OK)
-                
+
         except Event.DoesNotExist or Exception as e :
             payload = error_response(
                 status="failed", 
@@ -699,17 +673,16 @@ class LogoutView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user_id = serializer.validated_data.get('user_id')
-            try:
-                user = User.objects.get(id=user_id)
-                try:
-                    token = Token.objects.get(user=user)
-                    token.delete()
-                    return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
-                except Token.DoesNotExist:
-                    return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
-            except User.DoesNotExist:
-                return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
-        else:
+        if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user_id = serializer.validated_data.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+            try:
+                token = Token.objects.get(user=user)
+                token.delete()
+                return Response({'message': 'User successfully logged out.'}, status=status.HTTP_200_OK)
+            except Token.DoesNotExist:
+                return Response({'error': 'Token does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'error': 'User does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
